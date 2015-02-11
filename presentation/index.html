@@ -50,7 +50,7 @@ gh: romanowski
 
 @RomanwoskiKr
 
-<img src="imgs/vl.png" alt="Virtus Lab"/>
+<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none"/>
                     </script>
 
 
@@ -62,13 +62,361 @@ gh: romanowski
                             ## DSL
 
 
+                        </script></section>
 
-                        </script>
+                    <section data-markdown>
+                        <script type="text/template">
+A domain-specific language (DSL) is a computer language specialized to a particular application domain.
 
+<br/>
+<br/>
+
+[They are not a topic of this presentation]
+                        </script></section>
+
+                    <section data-markdown>
+                        <script type="text/template">
+                            ## Daily DSLs 
+[in Scala]
+                        </script></section>
+
+
+                    <section data-markdown>
+                        <script type="text/template">
+Code style that make developer live easier.
+
+[Romanowski]                           
+                        </script></section>
+
+ <section data-markdown>
+                        <script type="text/template">
+All presented code is dummy and should be consider as examples of greater ideas.
+                        </script></section>
+
+                </section>
+                <section>
+                    <section data-markdown>
+## Type Aliases
 
                     </section>
 
+                    <section data-markdown>
+<script type="text/template">
+Inside IDEs, libraries and yours applications
+
+```scala
+  // what is inside path? URL, windows/linux file?
+  def check(path: String): Boolean = {
+    //code
+  }
+```
+</script>
+                    </section>
+
+                    <section data-markdown>
+<script type="text/template">
+Is that easier to read and uderstand?
+
+```scala
+  type URLPath = String
+
+  def checkAgain(path: URLPath): Boolean = {
+    //code
+    false
+  }
+```
+</script>
+                    </section>
+
+                    <section data-markdown><script type="text/template">
+## Unicorn
+
+https://github.com/VirtusLab/unicorn
+
+```scala
+case class UserRow(id: Option[UserId],
+                   email: String,
+                   firstName: String,
+                   lastName: String)
+```
+                    </script></section>
+<!--
+                    <section data-markdown><script type="text/template">
+## Java integration
+
+
+```scala
+	table.getSelection().getData().asInstanceOf[MyData]
+	
+```
+
+or
+
+```scala
+	table.getSelection().getData() match {
+		case data: MyData => data
+}
+	
+```   
+
+still ugly...
+                 </script></section>
+-->
+
                 </section>
+
+<section>
+                 <section data-markdown><script type="text/template">
+## Callbacks dsl
+                 </script></section>
+
+ 				<section data-markdown><script type="text/template">
+## Side efects
+
+Normal way
+```scala
+val f = new FileWriter(filePath)
+  try {
+    f.write(items.mkString(", "))
+  } finally {
+    f.close()
+  }
+```
+
+                 </script></section>
+
+ 				<section data-markdown><script type="text/template">
+## Side efects
+
+Better way?
+```scala
+def write(where: String)(what: String)={
+    val f = new FileWriter(where)
+
+    try {
+      f.write(what)
+    } finally {
+      f.close()
+    }
+  }
+
+  write(filePath){
+    items.mkString(", ")
+  }
+```
+
+                 </script></section>
+
+ 				<section data-markdown><script type="text/template">
+## Side effects with state
+
+```scala
+"view" should "be creatable" in rollbackWithModel {
+    implicit session =>
+		//test here
+}
+```
+                 </script></section>
+ 				<section data-markdown><script type="text/template">
+
+## Beware: not too many!
+
+```scala
+withDb{ db =>
+	inRollback(db) withMongo {
+		mongo => inUserContext inBoardContext{
+			//here you can put your logic
+		}
+	}
+}
+```
+                 </script></section>
+
+ 				<section data-markdown><script type="text/template">
+
+## Hiding complex type
+
+```scala
+  def hidingTypes[A](a: Seq[A])(func: A => Boolean) ={
+    ??? //do eg. filtering
+  }  
+
+  val seq = List(1,2,3).map(1 to).zipWithIndex
+
+  hidingTypes(seq)(_._2 > 0)
+
+```
+                 </script></section>
+
+
+</section>
+<section>
+ 				<section data-markdown><script type="text/template">
+## Class sope
+                 </script></section>
+
+ 				<section data-markdown><script type="text/template">
+## Fixins
+
+```scala
+//in tests
+state.items should equal(List(state.item1, state.item2))
+
+//maybe better
+import state._
+items should equal(List(item1, item2))
+
+but how extend/override states?
+```
+                 </script></section>
+
+
+ 				<section data-markdown><script type="text/template">
+```scala
+//in tests
+trait State{
+ val states@Seq(state1, state2) = Seq("ala", "ma")
+}
+
+trait BetterState {
+	val state1 = "ola"
+}
+
+new State{
+  items should equal(List(item1, item2))
+}
+
+new State with BetterState{
+  items should equal(List(item1, item2))
+}
+
+```
+                 </script></section>
+
+
+ 				<section data-markdown><script type="text/template">
+## Java twekaing?
+
+```scala
+new BetterSetter(enitiy){
+	entity.setName("a").setAge(12).setRoom(2)
+}
+``` 
+
+How?
+```
+class BetterSetter[T](val v: T){
+    protected implicit def fromUnit(unused: Unit): T =v
+}
+```
+                 </script></section>
+ 				
+				<section data-markdown><script type="text/template">
+
+### In scala we can create new instances
+
+
+                </script></section>
+
+ 				<section data-markdown><script type="text/template">
+## Implicit hell
+
+```scala
+ object UtilObject {
+    def doIt(name: String)(implicit s: State) = {
+      //doSth
+      doItInner(name)
+    }
+
+    private def doItInner(name: String)(implicit s: State) = {
+      //doSth
+      doItInner2(name)
+    }
+
+    private def doItInner2(name: String)(implicit s: State) = {
+      //doSth
+      println(s)
+    }
+  }
+``` 
+                 </script></section>
+ 				<section data-markdown><script type="text/template">
+
+```scala
+class UtilClass(implicit state: State) {
+    def doIt(name: String) = {
+      //doSth
+      doItInner(name)
+    }
+
+    private def doItInner(name: String) = {
+      //doSth
+      doItInner2(name)
+    }
+
+    private def doItInner2(name: String) = {
+      //doSth
+      println(state)
+    }
+  }
+``` 
+                 </script></section>
+
+<section data-markdown><script type="text/template">
+
+```scala
+  implicit val s: State = ???
+
+  UtilObject.doIt("ala")
+
+  //not bad at all?
+  new UtilClass().doIt("ala")
+``` 
+                 </script></section>
+
+
+</section>
+
+<section>
+
+
+<section data-markdown><script type="text/template">
+
+### Interesting and advanced
+                 </script></section>
+
+<section data-markdown><script type="text/template">
+
+### Typesafe builder
+
+No code, sorry
+
+http://blog.rafaelferreira.net/2008/07/type-safe-builder-pattern-in-scala.html
+
+                 </script></section>
+
+<section data-markdown><script type="text/template">
+
+### Maybe macros?
+
+```scala
+deployToServer := {
+ 	val path = package.value
+	//code
+}
+```
+
+```
+`value` can only be used within a task or setting macro, 
+such as :=, +=, ++=, Def.task, or Def.setting.
+```
+
+                 </script></section>
+
+
+</section>
+
+
 			</div>
 
 		</div>
