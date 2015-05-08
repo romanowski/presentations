@@ -37,6 +37,7 @@
 
 
 
+
 	</script>
 
 	<!--[if lt IE 9]>
@@ -120,14 +121,16 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Our lamdas are created in *debugging* jvm but should live in *debugged* one.
+				Our lamdas are created in *debugging* jvm
+
+				but should live in *debugged* one.
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
 				### Problem 1:
-				Jdi based class loading
+				JDI-based class loading
 				</script>
 			</section>
 
@@ -155,7 +158,16 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				TODO complex type intro
+				There are lamdas that can be compiled to Any => Any
+				but e.g. filter require Any => Boolean.
+
+				```scala
+				myList.map(_.getParent)
+
+				myList.filter(_.required)
+				```
+
+				When we missing full generic types for our values then how can compile filter correctly?
 				</script>
 			</section>
 
@@ -312,12 +324,137 @@
 				Accessing runtime values:
 
 				method parameters and local variables
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Closures
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Simple scala lambda with closure
+
+				```scala
+				val outer = 123
+				list.map(_ + outer)
+				```
+				is compiled to (excluding implicits)
+
+				```scala
+				val outer = 123
+				class Lambda(outer: Int) extends Function1[Int]{
+					def apply(v: Int): Int = v + outer
+				}
+
+				list.map(new Lambda(outer))
+				```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				What we need to do:
+
+				1. Find all clousre parameters
+				2. Inject this values to created lambda
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Find all clousre parameters
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Traverser
+
+				```scala
+				final override def traverse(tree: Tree): Unit = {
+				tree match {
+				// all identifiers
+				case Ident(name: TermName) if !scopeManager.insideImport =>
+				nameManager.registerUnboundName(name, tree, isLocal = false)
+
+				//typed expression like x: Int
+				case restTree @ Typed(impl, _) =>
+				super.traverse(impl)
+
+				case _ => super.traverse(tree)
+				}
+				```
+
+				fragment of:  UnboundValuesSupport.scala
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				VariableProxyTraverser
+
+				Finds all unbound indetifiers.
+
+				Value is bound if in current scope is:
+
+				1. value/variable/def definition
+				1. named paramter
+				1. pattern in case or for-comprehension
+				1. is lambda implementation parameter
+
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Inject this values to created lambda
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Inject this values to created lambda
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Inject this values to created lambda
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Let's translate
+
+				```scala
+				val closureParam = 1
+				list.map(_ + closureParam)
+				```
+				to
+
+				```scala
+				val closureParam = 1
+				list.map(
+				__contex.newInstance("<random-lambda-name>", Seq(closureParam))
+				```
+
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Accessing runtime values:
+
+				method parameters and local variables
 
 				<img src="imgs/solved.gif" style="background: none; border: none; margin-top: -60px">
 				</script>
 			</section>
 		</section>
-
 
 		<section>
 			<section data-markdown>
@@ -329,6 +466,17 @@
 				</script>
 			</section>
 		</section>
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+				## Contribute for your and greater good!
+
+				github.com/scala-ide/scala-ide
+				</script>
+			</section>
+		</section>
+
 		<!-- ################################################################################################################ -->
 	</div>
 
@@ -359,6 +507,7 @@
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
+
 
 
 
