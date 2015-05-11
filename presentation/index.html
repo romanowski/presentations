@@ -77,6 +77,19 @@
 				</script>
 
 			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Plan
+
+				1. Why lambdas?
+				2. Why labdas are not so trivial to support in tooling (show problems)
+				3. How those problems are faced in Expression Evaluator from ScalaIDE
+				
+				</script>
+
+			</section>
+
 		</section>
 
 		<section>
@@ -88,17 +101,49 @@
 			</section>
 			<section data-markdown>
 				<script type="text/template">
-				## Example 1
+				## Collections
+
+				```scala
+				bigSet.exists(_.isRemote)
+
+				bigList.forAll(_.shouldBeRun)
+
+				bigMap.filter{ case (k,v) => k.startsWitj("some")}
+
+				//And many, many more!
+				```
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				## Example 2
+				## Callbacks
+
+				```scala
+				inTransaction{
+					findUsers()
+				}
+				```
+
+				```scala
+				var allUsers = Seq.empty[User]
+				onUsers(
+					user => allUsers += user
+				)
+				allUsers
+				```
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				And later combined as conditional breakpoint
+
+				TODO
 				</script>
 			</section>
 		</section>
-
 		<!-- ################################################################################################################ -->
 
 		<section>
@@ -241,6 +286,43 @@
 
 			<section data-markdown>
 				<script type="text/template">
+				#### Toolbox compilation output
+
+				ls toolbox-output
+				```
+				__wrapper$1$6dbe9210e60f458c98e6e4b9b720f085
+				__wrapper$16$f62dabc761474ea6bebf0555edaa9b11
+				__wrapper$1$6fea4b9cf7de4073a3181c519e4c0c6f
+				__wrapper$17$04134eae8de14694839ca932b6425c60
+				...
+				```
+
+				ls toolbox-output/new-package
+
+				```
+				__wrapper$1$07d42f7a083d4b319b3aa57cce3ac6ca.class
+				__wrapper$1$07d42f7a083d4b319b3aa57cce3ac6ca$CustomFunction$1.class
+				__wrapper$1$07d42f7a083d4b319b3aa57cce3ac6ca$.class
+
+				```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				#### ClassListener
+
+				1. Rememeber all directories (packages) in toolbox output
+				1. Compile lambda
+				1. Find newly created directories
+				1. Gather all classes containg predefined lambda name (e.g. CustomLambda) from it
+
+				details: AnonymousFunctionSupport.scala
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
 				### Send class bytes to debugged machine
 				</script>
 			</section>
@@ -256,6 +338,19 @@
 				##### String cd
 
 				encode byte array as string, send and decode it again on debugged JVM (we are using Base64) - ScalaIDE way
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				### Side note
+
+				Greates limiation of creating JDI base tools: We are limited to java/scala standard library on the side of debugged JVM.
+
+				What is more we should not class load remotly too much:
+
+				1. It takes time
+				1. It thrashes debugged machine (PermGen)
 				</script>
 			</section>
 
@@ -410,13 +505,32 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Inject this values to created lambda
+				Wait! What with packages?
+
+				```scala
+				mutable.Set.empty[String]
+				```
+				mutable is umbound!
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Inject this values to created lambda
+				The biggest AST transformer problem:
+
+				You always forgot about some tree shapes!
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Sidenote
+
+				Toolbox has poor support for packages.
+
+				https://issues.scala-lang.org/browse/SI-6393
+
+				Reason: Packages are "phantom" in JVM implementation (cannot be enumerated simply).
 				</script>
 			</section>
 
@@ -439,7 +553,7 @@
 				```scala
 				val closureParam = 1
 				list.map(
-				__contex.newInstance("<random-lambda-name>", Seq(closureParam))
+				__contex.newInstance("random-lambda-name", Seq(closureParam))
 				```
 
 				</script>
