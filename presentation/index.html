@@ -82,12 +82,21 @@
 				<script type="text/template">
 				## Plan
 
-				1. Why lambdas?
-				2. Why labdas are not so trivial to support in tooling (show problems)
-				3. How those problems are faced in Expression Evaluator from ScalaIDE
+				1. Why do I need lambdas for Scala code debugging?
+				2. Why labdas are not so trivial to support in tooling?
+				3. What is done to support lambdas in ScalaIDE debugger?
 
 				</script>
+			</section>
 
+			<section data-markdown>
+				<script type="text/template">
+				I do not plan to inroduce Expression Evaluator from ScalaIDE
+				
+				@Kwestor @pociecha @pkukielka and @romanowski (me)
+				
+				Ask this guys for such presentation :)
+				</script>
 			</section>
 
 		</section>
@@ -104,11 +113,13 @@
 				## Collections
 
 				```scala
-				bigSet.exists(_.isRemote)
+				connections.partition(_.isRemote)
 
-				bigList.forAll(_.shouldBeRun)
+				employees.groupBy(_.unit)
 
-				bigMap.filter{ case (k,v) => k.startsWitj("some")}
+				nameIndex.filter{ case (name, user) => name.startsWitj("John")}
+				
+				cities.sortBy(_.population)
 
 				//And many, many more!
 				```
@@ -120,16 +131,14 @@
 				## Callbacks
 
 				```scala
-				inTransaction{
+				inTransaction {
 					findUsers()
 				}
 				```
 
 				```scala
 				var allUsers = Seq.empty[User]
-				onUsers(
-					user => allUsers += user
-				)
+				onUsers(user => allUsers += user)
 				allUsers
 				```
 				</script>
@@ -140,7 +149,11 @@
 				<script type="text/template">
 				And later combined as conditional breakpoint
 
-				TODO
+				```scala
+				users.exist(_.salary > 2000)
+				
+				inContext(_.is)
+				```
 				</script>
 			</section>
 		</section>
@@ -203,16 +216,49 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				There are lamdas that can be compiled to Any => Any
-				but e.g. filter require Any => Boolean.
-
+				Lambda are generic typed. In runtime all those lambdas has the same signature.
 				```scala
-				myList.map(_.getParent)
+				Int => Int
+				Ala => Ola
+				String => Map[Int, Double]
+				```
+				
+				<br>
+				
+				Of course we can type such lambdas using e.g. presentation compiler but we can't always rely on in.
+				
+				Why we can't always rely on PC? Have you ever used eclipse? :)
+				</script>
+			</section>
 
-				myList.filter(_.required)
+			<section data-markdown>
+				<script type="text/template">
+				Luckily function are contravariant. 
+				
+
+				```scala 
+				// everywhere when we need
+				Cat => Dog
+				// we can use 
+				Any => Dog.
+				```
+				
+				So when we missing generic types we can typed our lambdas as
+				```scala
+				Any => Any
+				```
+				</script>
+			</section>
+			
+			<section data-markdown>
+				<script type="text/template">
+				
+				Filter from scala collection require 
+				```scala
+				Any => Boolean
 				```
 
-				When we missing full generic types for our values then how can compile filter correctly?
+				When we missing full generic types for our lambda then how can compile filter correctly?
 				</script>
 			</section>
 
@@ -573,7 +619,14 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				Typing lambdas.
+				## Typing lambdas
+				</script>
+			</section>
+		
+		
+			<section data-markdown>
+				<script type="text/template">
+				## Typing lambdas.
 
 				Especially when we cannot rely on Presentation Compiler
 				<img src="imgs/solved.gif" style="background: none; border: none; margin-top: -40px">
@@ -621,16 +674,6 @@
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
-
-
-
-
-
-
-
-
-
-
 
 </script>
 
