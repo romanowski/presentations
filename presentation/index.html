@@ -28,17 +28,11 @@
 			link.type = 'text/css';
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
-
-
-
-
-
-
-
-
-
-
 	</script>
+
+	<style type="text/css">
+		.lefty { text-align: left; }
+	</style>
 
 	<!--[if lt IE 9]>
 	<script src="lib/js/html5shiv.js"></script>
@@ -58,9 +52,12 @@
 
 			romanowski.kr@gmail.com
 
-			gh: romanowski
+			<div class="lefty" style="margin-left: 36%;">
+				<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
+				<br/>
+				<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> RomanowskiKr
 
-			@RomanwoskiKr
+			</div>
 
 			<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none"/>
 			</script>
@@ -93,9 +90,17 @@
 				<script type="text/template">
 				I do not plan to inroduce Expression Evaluator from ScalaIDE
 				
-				@Kwestor @pociecha @pkukielka and @romanowski (me)
+				@Kwestor @mpociecha @pkukielka and @romanowski (me)
 				
 				Ask this guys for such presentation :)
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				All sources mentioned during presentation comes from ScalaIDE expression evaluator.
+
+				https://github.com/scala-ide/scala-ide/tree/master/org.scala-ide.sdt.debug.expression
 				</script>
 			</section>
 
@@ -113,13 +118,13 @@
 				## Collections
 
 				```scala
-				connections.partition(_.isRemote)
+				departamets.groupBy(_.location)
 
-				employees.groupBy(_.unit)
+				employees.partion(employee => shouldBeTrusted(employee, "now"))
 
-				nameIndex.filter{ case (name, user) => name.startsWitj("John")}
-				
-				cities.sortBy(_.population)
+				bigMap.filter{ case (k,v) => k.startsWith("some")}
+
+				entityList.map(_.nested1.nested2.nested3)
 
 				//And many, many more!
 				```
@@ -147,12 +152,14 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				And later combined as conditional breakpoint
+				And also combined as conditional breakpoints
 
 				```scala
-				users.exist(_.salary > 2000)
+				users.forAll(_.salary > 4000)
+
+				multiList.exist(_.exist(_.isNamed))
 				
-				inContext(_.is)
+				inContext(members.isEmpty)
 				```
 				</script>
 			</section>
@@ -162,18 +169,18 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				not so trivial to support in tooling
-				## Why?
+				#### not so trivial to support in tooling
+				# Why?
 				</script>
 
 			</section>
 			<section data-markdown>
 				<script type="text/template">
-				Debugged JVM: where application lives
-				^
-				JDI
-				^
-				Debugging JVM: where expression lives
+				*Debugged JVM*: where application lives
+				<br> &#8593;&#8593;&#8593;
+				<br> JDI
+				<br> &#8593;&#8593;&#8593;
+				<br>*Debugging JVM*: where expression lives
 				</script>
 			</section>
 
@@ -196,8 +203,8 @@
 				<script type="text/template">
 				```scala
 				def myMethod(methodParam: Int): Unit = {
-				val localParam: Int = 12
-				....
+				  val localParam: Int = 12
+				  //we are stopped at breakpoint here
 				}
 				```
 
@@ -306,7 +313,7 @@
 				list => list.map(_ + 2)
 				```
 
-				To class load we should translate this pice fo code to class that can classloaded.
+				To classload we should translate this pice fo code so it can be compiled to .class file.
 				</script>
 			</section>
 
@@ -322,7 +329,7 @@
 
 				```scala
 				class CustomFunction extends Function1[User, Any]{
-				override def apply(user) => user.isSutiable
+				  override def apply(user) => user.isSutiable
 				}
 				```
 
@@ -356,14 +363,16 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				#### ClassListener
+				### ClassListener
 
 				1. Rememeber all directories (packages) in toolbox output
 				1. Compile lambda
-				1. Find newly created directories
+				1. Find newly created directory (random nemed package)
 				1. Gather all classes containg predefined lambda name (e.g. CustomLambda) from it
 
-				details: AnonymousFunctionSupport.scala
+				<br/>
+
+				<div class="lefty">details: AnonymousFunctionSupport.scala</div>
 				</script>
 			</section>
 
@@ -377,26 +386,31 @@
 				<script type="text/template">
 				JDI allows us to send data to debugged jvm using:
 
-				##### Any primitive
+				<br/>
 
-				create byte array on debugged jvm and set each byte - Intellij way
+				##### Any primitive - Intellij way
 
-				##### String cd
+				create byte array on debugged jvm and set each byte
 
-				encode byte array as string, send and decode it again on debugged JVM (we are using Base64) - ScalaIDE way
+				<br/>
+
+				##### String  - ScalaIDE way
+
+				encode byte array as string, send and decode it again on debugged JVM (we are using Base64)
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				### Side note
+				**Side note** Serious limiation of creating JDI base tools:
 
-				Greates limiation of creating JDI base tools: We are limited to java/scala standard library on the side of debugged JVM.
+				<br/>
 
-				What is more we should not class load remotly too much:
+				#### We are limited to java/scala standard library on the side of debugged JVM.
 
-				1. It takes time
-				1. It thrashes debugged machine (PermGen)
+				<br/>
+
+				All other classes should be classload (what is not nice for even small lib containg ~20 class files)
 				</script>
 			</section>
 
@@ -424,7 +438,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				### Define class in classload on debugged jvm
+				### Define class using classloader on debugged jvm
 				</script>
 			</section>
 
@@ -436,15 +450,15 @@
 
 				// obtain class loader for top stackframe class
 				val classLoaderRef =
-				currentFrame.thisObject.referenceType.classLoader
+				  currentFrame.thisObject.referenceType.classLoader
 
 				val defineClassMethod = classLoaderRef.referenceType
-				.methodsByName("defineClass", methodSignature).head
+				  .methodsByName("defineClass", methodSignature).head
 
 				// load the class
 				classLoaderRef
-				.invokeMethod(currentThread, defineClassMethod, classData)
-				.asInstanceOf[ClassObjectReference]
+				  .invokeMethod(currentThread, defineClassMethod, classData)
+				  .asInstanceOf[ClassObjectReference]
 				```
 				</script>
 			</section>
@@ -462,7 +476,7 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				Accessing runtime values:
+				### Accessing runtime values:
 
 				method parameters and local variables
 				</script>
@@ -486,7 +500,7 @@
 
 				```scala
 				val outer = 123
-				class Lambda(outer: Int) extends Function1[Int]{
+				class Lambda(outer: Int) extends Function1[Int] {
 					def apply(v: Int): Int = v + outer
 				}
 
@@ -500,7 +514,7 @@
 				What we need to do:
 
 				1. Find all clousre parameters
-				2. Inject this values to created lambda
+				2. Inject those values to created lambda
 				</script>
 			</section>
 
@@ -512,24 +526,24 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Traverser
+				### Traverser
 
 				```scala
 				final override def traverse(tree: Tree): Unit = {
-				tree match {
-				// all identifiers
-				case Ident(name: TermName) if !scopeManager.insideImport =>
-				nameManager.registerUnboundName(name, tree, isLocal = false)
+				  tree match {
+				    // all identifiers
+				    case Ident(name: TermName) if !scopeManager.insideImport =>
+				       nameManager.registerUnboundName(name, tree, isLocal = false)
 
-				//typed expression like x: Int
-				case restTree @ Typed(impl, _) =>
-				super.traverse(impl)
+				    //typed expression like x: Int
+				    case restTree @ Typed(impl, _) =>
+				        super.traverse(impl)
 
-				case _ => super.traverse(tree)
+				    case _ => super.traverse(tree)
 				}
 				```
-
-				fragment of:  UnboundValuesSupport.scala
+				<br/>
+				<div class="lefty">more:  UnboundValuesSupport.scala</div>
 				</script>
 			</section>
 
@@ -554,9 +568,9 @@
 				Wait! What with packages?
 
 				```scala
-				mutable.Set.empty[String]
+				_ => mutable.Set.empty[String]
 				```
-				mutable is umbound!
+				mutable is unbound!
 				</script>
 			</section>
 
@@ -564,7 +578,7 @@
 				<script type="text/template">
 				The biggest AST transformer problem:
 
-				You always forgot about some tree shapes!
+				#### You always forget about some tree shapes!
 				</script>
 			</section>
 
@@ -582,7 +596,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				## Inject this values to created lambda
+				## Inject closure values to created lambda
 				</script>
 			</section>
 
@@ -607,7 +621,31 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Accessing runtime values:
+				In scala AST:
+
+				```scala
+				val constructorArgs =
+					Literal(Constant(newFunctionType)) ::
+					Apply(SelectApplyMethod("Seq"), closureArgs) ::
+					Nil
+
+				//__contex.newInstance("random-lambda-name", Seq(closureParam))
+				val newInstanceCall = Apply(
+				  Select(
+				    Ident(TermName(Debugger.contextParamName)),
+				    TermName(Debugger.newInstance)
+				   ),
+				  constructorArgs
+				)
+				```
+
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				### Accessing runtime values:
 
 				method parameters and local variables
 
@@ -674,6 +712,16 @@
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
+
+
+
+
+
+
+
+
+
+
 
 </script>
 
