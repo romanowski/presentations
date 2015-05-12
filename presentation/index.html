@@ -222,7 +222,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Lambdas are generic typed. In runtime all those lambdas has the same signature.
+				Lambda are genericly typed. In runtime all those lambdas have the same signature.
 				```scala
 				Int => Int
 				Ala => Ola
@@ -231,7 +231,7 @@
 				
 				<br>
 				
-				Of course we can type such lambdas using e.g. presentation compiler but we can't always rely on in.
+				Of course we can type such lambdas using e.g. presentation compiler but we can't always rely on it.
 				
 				Why we can't always rely on PC? Have you ever used Eclipse? :)
 				</script>
@@ -239,7 +239,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Luckily function are contravariant. 
+				Luckily functions are contravariant (from argument point of view).
 				
 
 				```scala 
@@ -249,7 +249,7 @@
 				Any => Dog.
 				```
 				
-				So when we're missing generic types, we can type our lambdas as
+				When we're missing generic types, we can type our lambdas as
 				```scala
 				Any => Any
 				```
@@ -293,19 +293,19 @@
 
 				1. Compile class to byte array
 				2. Send class bytecode to debugged machine
-				2. Define class in classload on debugged JVM
+				2. Define class in classloader on debugged JVM
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				###  Compile cass to array of bytes
+				###  Compile class to array of bytes
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Usually lambdas look like this (or at least should look):
+				Usually lambdas look (or at least should look) like this:
 				```scala
 				_.toInt
 				//or
@@ -314,7 +314,7 @@
 				list => list.map(_ + 2)
 				```
 
-				To classload we should translate this piece fo code so it can be compiled to .class file.
+				To classload this we should translate this piece fo code so it can be compiled to .class file.
 				</script>
 			</section>
 
@@ -368,7 +368,7 @@
 
 				1. Store all directories (packages) in toolbox output
 				1. Compile lambda
-				1. Find newly created directory (random named package)
+				1. Find newly created directory (randomly named package)
 				1. Gather all classes containing predefined lambda name (e.g. CustomLambda) from it
 
 				<br/>
@@ -403,7 +403,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				**Side note** Serious limiation of creating JDI base tools:
+				**Side note** Serious limitaion of creating JDI base tools:
 
 				<br/>
 
@@ -411,7 +411,7 @@
 
 				<br/>
 
-				All other classes should be classloaded (what is not nice even for small lib containing ~20 class files)
+				All other classes should be classloadeded (what is not nice even for a small lib containing ~20 class files)
 				</script>
 			</section>
 
@@ -556,11 +556,11 @@
 
 				Finds all unbound identifiers.
 
-				Value is bound if current scope is:
+				Value is bound if, in current scope, it is either:
 
-				1. value/variable/def definition
-				1. named parameter
-				1. pattern in case or for-comprehension
+				1. value/variable/def definition or,
+				1. named parameter or,
+				1. pattern in case or for-comprehension or,
 				1. lambda implementation parameter
 
 				</script>
@@ -568,7 +568,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Wait! What with packages?
+				Wait! What about packages?
 
 				```scala
 				_ => mutable.Set.empty[String]
