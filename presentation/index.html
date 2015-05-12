@@ -97,7 +97,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				All sources mentioned during presentation comes from ScalaIDE expression evaluator.
+				All sources mentioned during presentation come from ScalaIDE expression evaluator.
 
 				https://github.com/scala-ide/scala-ide/tree/master/org.scala-ide.sdt.debug.expression
 				</script>
@@ -119,7 +119,7 @@
 				```scala
 				departaments.groupBy(_.location)
 
-				employees.partion(employee => shouldBeTrusted(employee, "now"))
+				employees.partition(employee => shouldBeTrusted(employee, "now"))
 
 				bigMap.filter{ case (k,v) => k.startsWith("some")}
 
@@ -309,12 +309,12 @@
 				```scala
 				_.toInt
 				//or
-				user => user.isSutiable
+				user => user.isSuitable
 				//or
 				list => list.map(_ + 2)
 				```
 
-				To classload this we should translate this piece fo code so it can be compiled to .class file.
+				To classload this we should translate this piece of code so it can be compiled to .class file.
 				</script>
 			</section>
 
@@ -397,7 +397,7 @@
 
 				##### String  - ScalaIDE way
 
-				encode byte array as string, send and decode it again on debugged JVM (we are using Base64)
+				encode byte array as string, send and decode it again on debugged JVM (we use Base64)
 				</script>
 			</section>
 
