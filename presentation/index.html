@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Using Lambdas for Scala code debugging</title>
+	<title>Using Lambdas for debugging Scala code </title>
 	<meta name="description" content="Presentation about using Lambdas for Scala code debugging, which is not so trivial to support in tooling">
 	<meta name="author" content="Krzysztof Romanowski">
 
@@ -71,7 +71,7 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## Using Lambdas for Scala code debugging
+				## Using Lambdas for debugging Scala code
 
 				not so trivial to support in tooling
 				</script>
@@ -334,7 +334,7 @@
 
 				```scala
 				class CustomFunction extends Function1[User, Any]{
-				  override def apply(user) => user.isSutiable
+				  override def apply(user) = user.isSuitable
 				}
 				```
 
@@ -407,7 +407,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				**Side note** Serious limitaion of creating JDI base tools:
+				**Side note** Serious limitation of creating JDI base tools:
 
 				<br/>
 
@@ -415,7 +415,7 @@
 
 				<br/>
 
-				All other classes should be classloadeded (what is not nice even for a small lib containing ~20 class files)
+				All other classes should be classloaded (what is not nice even for a small lib containing ~20 class files)
 				</script>
 			</section>
 
@@ -507,7 +507,7 @@
 
 				```scala
 				val outer = 123
-				class Lambda(outer: Int) extends Function1[Int] {
+				class Lambda(outer: Int) extends Function1[Int, Int] {
 					def apply(v: Int): Int = v + outer
 				}
 
@@ -542,11 +542,12 @@
 				    case Ident(name: TermName) if !scopeManager.insideImport =>
 				       nameManager.registerUnboundName(name, tree, isLocal = false)
 
-				    //typed expression like x: Int
+				    // typed expression like x: Int
 				    case restTree @ Typed(impl, _) =>
-				        super.traverse(impl)
+				       super.traverse(impl)
 
 				    case _ => super.traverse(tree)
+				  }
 				}
 				```
 				<div class="lefty">more:  UnboundValuesSupport.scala</div>
@@ -709,7 +710,7 @@
 				<script type="text/template">
 				So maybe we should use some kind of dynamic typing?
 
-				Lets use Scala's Dynamic trait!
+				Let's use Scala's Dynamic trait!
 				</script>
 			</section>
 
@@ -778,7 +779,7 @@
 				val list: List[JdiProxy] = ???
 				val source: Source = ???
 
-				list.filter( (x: Chanell) => x.isConnected(source))
+				list.filter( (x: Chanel) => x.isConnected(source))
 				```
 				How we can compile this?
 				</script>
@@ -805,17 +806,17 @@
 				Plan:
 
 				1. Take code proceeding our lambda
-				2. Add placeholder methods with all colure types
+				2. Add placeholder methods with all closure types
 				2. Typecheck it and gather types
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Our expression is temporaly transformed to:
+				Our expression is temporarily transformed to:
 
 				```scala
-				//variales declarations/imports/etc in our simple case:
+				//variables declarations/imports/etc in our simple case:
 				val list: List[JdiProxy] = ???
 				val source: Source = ???
 
