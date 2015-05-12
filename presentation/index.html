@@ -14,6 +14,14 @@
 	<meta name="viewport"
 	      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
+	<style type="text/css">
+		.lefty {
+		text-align: left;
+		font-size: 65% !important;
+		margin-left: 5%  !important;
+		}
+	</style>
+
 	<link rel="stylesheet" href="css/reveal.css">
 	<link rel="stylesheet" href="css/theme/black.css" id="theme">
 
@@ -28,10 +36,6 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 	</script>
-
-	<style type="text/css">
-		.lefty { text-align: left; }
-	</style>
 
 	<!--[if lt IE 9]>
 	<script src="lib/js/html5shiv.js"></script>
@@ -51,7 +55,7 @@
 
 			romanowski.kr@gmail.com
 
-			<div class="lefty" style="margin-left: 36%;">
+			<div style="margin-left: 36% text-align: left;">
 				<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
 				<br/>
 				<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> RomanowskiKr
@@ -545,7 +549,6 @@
 				    case _ => super.traverse(tree)
 				}
 				```
-				<br/>
 				<div class="lefty">more:  UnboundValuesSupport.scala</div>
 				</script>
 			</section>
@@ -669,44 +672,36 @@
 		
 			<section data-markdown>
 				<script type="text/template">
-				The problem once again.
+				The problem:
 
 				```scala
 				list.filter(_.isConnected)
 				```
 
-				When we know that list is List[Channel] task is simple.
+				When we know that list is typed as
+				```scala
+				val list: List[Channel] = ...
+				```
+				task is simple.
+
 				The problem starts when we don't have such luxury.
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				When we can rely only on JDI that has access to earused type information (we don't have more on JVM runtime).
+				When we can rely only on JDI we have access to erased types (there is nothing more in JVM runtime).
 
-				Our lambda with or infirmation we have:
+				<br/>
+
 				```scala
 				val list: List[_] = ???
+				val source: Source = ???
 
-				list.filter(_.isConnected)
+				list.filter(_.isConnected(source))
 				```
 
-				Is the List[_] the best what we can use?
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				When we can rely only on JDI that has access to earused type information (we don't have more on JVM runtime).
-
-				Our lambda with or infirmation we have:
-				```scala
-				val list: List[_] = ???
-
-				list.filter(_.isConnected)
-				```
-
-				Is the List[_] the best what we can use?
+				Is List[_] the best what we can use?
 				</script>
 			</section>
 
@@ -714,7 +709,7 @@
 				<script type="text/template">
 				So maybe we should use some kind of dynamic typing?
 
-				hmmmmm, lets use Dynamic trait
+				Lets use Scala's Dynamic trait!
 				</script>
 			</section>
 
@@ -723,18 +718,16 @@
 				<script type="text/template">
 				```scala
 				trait JdiProxy extends Dynamic {
+
 				  /** Implementation of method application. */
-				  def applyDynamic(name: String)(args: Any*): JdiProxy = applyWithGenericType(name, genericThisType, args: _*)
+				  def applyDynamic(name: String)(args: Any*): JdiProxy =
+				    applyWithGenericType(name, genericThisType, args: _*)
 
 				  /** Implementation of field selection. */
 				  def selectDynamic(name: String): JdiProxy =
 				    callSpecialMethod(name, Seq()).getOrElse {
 				      __context.invokeMethod(this, genericThisType, name, Seq())
 				    }
-
-				  /** Implementation of variable mutation. */
-				  def updateDynamic(name: String)(value: Any): UnitJdiProxy =
-				    __context.invokeMethod(this, genericThisType, s"${name}_=", Seq(value.asInstanceOf[JdiProxy])).asInstanceOf[UnitJdiProxy]
 				  }
 				```
 
@@ -744,17 +737,18 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				So our lambda become:
+				Our lambda becomes:
 				```scala
 				val list: List[JdiProxy] = ???
+				val source: Source = ???
 
-				list.filter(_.isConnected)
+				list.filter(_.isConnected(source))
 				//translated to
-				list.filter(_.selectDynamic("isConnected"))
+				list.filter(_.applyDynamic("isConnected")(source))
 				```
 				typed as JdiProxy => JdiProxy
 
-				But it still does not compiles...
+				But it still does not compile...
 				</script>
 			</section>
 
@@ -776,22 +770,23 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Let's create non-compiling scala code:)
+				Back to the filter.
 
-				So our lambda become:
+				Let's create non-compiling scala code :)
+
 				```scala
 				val list: List[JdiProxy] = ???
-				val
+				val source: Source = ???
 
-				list.filter( (x: Chanell) => x.isConnected)
+				list.filter( (x: Chanell) => x.isConnected(source))
 				```
-				How does it compiles?
+				How we can compile this?
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Before we try to compile or typecheck our lambda we've got to transform in.
+				Before we try to compile or typecheck our lambda we've got to transform it.
 
 				Plan:
 
@@ -805,24 +800,19 @@
 				<script type="text/template">
 				How can we type all closure parameters?
 
-				Our code looks like this:
-				```scala
-				//variales declarations/imports/etc in our simple case:
-				val list: List[JdiProxy] = ???
-				val source: Source = ???
-
-				list.filter((x: Chanell) => x.isConnected(source))
-				```
-
-				We know names of all closure parameters.
-
 				Maybe toolbox can do it for us?
+
+				Plan:
+
+				1. Take code proceeding our lambda
+				2. Add placeholder methods with all colure types
+				2. Typecheck it and gather types
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Let's take all code from our expression up to the point of lambda and add placeholder methods with all colure types.
+				Our expression is temporaly transformed to:
 
 				```scala
 				//variales declarations/imports/etc in our simple case:
@@ -831,13 +821,13 @@
 
 				placeholder(source)
 				```
-
-				Now we are using toolbox typecheck method and traverse tree to gets type for all values pass to placeholder.
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
+				Traversing:
+
 				```scala
 				new universe.Traverser {
 				  override def traverse(tree: universe.Tree): Unit = {
@@ -849,6 +839,13 @@
 				  }
 				}
 				```
+				<div class="lefty">more: MockedTypeLambdas.scala</div>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Gathering types:
 
 				```sacala
 				object PlaceholderArgs {
@@ -871,13 +868,17 @@
 				<script type="text/template">
 				Lambda compiled. We know that it is: (A, B) => C
 
-				Now we replace this lambda with
 				```scala
-				val code = s"""$contextName.$stubName[$retType]("$newFunctionType", $additionalArgs)"""
-				val ast = toolbox.parse(code)
+				val list: List[JdiProxy] = ???
+				val source: Source = ???
+
+				list.filter(__context.placeholderFunction[Boolean](
+				  "compiled-type",
+				  Seq(source)
+				)
 				```
 
-				And all finally compiles and works.
+				Code finally compiles and works.
 				</script>
 			</section>
 
