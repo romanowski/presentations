@@ -5,8 +5,7 @@
 	<meta charset="utf-8">
 
 	<title>Using Lambdas for Scala code debugging</title>
-
-	<meta name="description" content="description">
+	<meta name="description" content="Presentation about using Lambdas for Scala code debugging, which is not so trivial to support in tooling">
 	<meta name="author" content="Krzysztof Romanowski">
 
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -208,7 +207,7 @@
 				}
 				```
 
-				Since method params and local values are not member of any object and cannot be acessed other than using JDI.
+				Since method params and local values are not members of any object and cannot be accessed in a way other than using JDI.
 				</script>
 			</section>
 
@@ -223,7 +222,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Lambda are generic typed. In runtime all those lambdas has the same signature.
+				Lambdas are generic typed. In runtime all those lambdas has the same signature.
 				```scala
 				Int => Int
 				Ala => Ola
@@ -250,7 +249,7 @@
 				Any => Dog.
 				```
 				
-				So when we missing generic types we can typed our lambdas as
+				So when we're missing generic types, we can type our lambdas as
 				```scala
 				Any => Any
 				```
@@ -260,12 +259,12 @@
 			<section data-markdown>
 				<script type="text/template">
 				
-				Filter from Scala collection require 
+				Filter from Scala collection requires 
 				```scala
 				Any => Boolean
 				```
 
-				When we missing full generic types for our lambda then how can compile filter correctly?
+				When we're missing full generic types for our lambda, then how can we compile filter correctly?
 				</script>
 			</section>
 
@@ -290,8 +289,8 @@
 				<script type="text/template">
 				Class load steps:
 
-				1. Compile class to array of bytes
-				2. Send class bytes to debugged machine
+				1. Compile class to byte array
+				2. Send class bytecode to debugged machine
 				2. Define class in classload on debugged JVM
 				</script>
 			</section>
@@ -365,7 +364,7 @@
 				<script type="text/template">
 				### ClassListener
 
-				1. Rememeber all directories (packages) in toolbox output
+				1. Store all directories (packages) in toolbox output
 				1. Compile lambda
 				1. Find newly created directory (random named package)
 				1. Gather all classes containing predefined lambda name (e.g. CustomLambda) from it
@@ -406,11 +405,11 @@
 
 				<br/>
 
-				#### We are limited to java/scala standard library on the side of debugged JVM.
+				#### We are limited to Java/Scala standard library on the side of debugged JVM.
 
 				<br/>
 
-				All other classes should be classload (what is not nice for even small lib containg ~20 class files)
+				All other classes should be classloaded (what is not nice even for small lib containing ~20 class files)
 				</script>
 			</section>
 
@@ -553,12 +552,12 @@
 
 				Finds all unbound identifiers.
 
-				Value is bound if in current scope is:
+				Value is bound if current scope is:
 
 				1. value/variable/def definition
 				1. named parameter
 				1. pattern in case or for-comprehension
-				1. is lambda implementation parameter
+				1. lambda implementation parameter
 
 				</script>
 			</section>
@@ -727,3 +726,4 @@
 
 </body>
 </html>
+adventurous
