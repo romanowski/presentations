@@ -4,9 +4,8 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>title</title>
-
-	<meta name="description" content="description">
+	<title>Using Lambdas for Scala code debugging</title>
+	<meta name="description" content="Presentation about using Lambdas for Scala code debugging, which is not so trivial to support in tooling">
 	<meta name="author" content="Krzysztof Romanowski">
 
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -59,7 +58,7 @@
 
 			</div>
 
-			<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none"/>
+			<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
 			</script>
 		</section>
 
@@ -88,7 +87,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				I do not plan to inroduce Expression Evaluator from ScalaIDE
+				I do not plan to introduce Expression Evaluator from ScalaIDE
 				
 				@Kwestor @mpociecha @pkukielka and @romanowski (me)
 				
@@ -118,7 +117,7 @@
 				## Collections
 
 				```scala
-				departamets.groupBy(_.location)
+				departaments.groupBy(_.location)
 
 				employees.partion(employee => shouldBeTrusted(employee, "now"))
 
@@ -186,7 +185,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Our lamdas are created in *debugging* jvm
+				Our lamdas are created in *debugging* JVM
 
 				but should live in *debugged* one.
 				</script>
@@ -208,7 +207,7 @@
 				}
 				```
 
-				Since method params and local values are not member of any object and cannot be acessed other than using JDI.
+				Since method params and local values are not members of any object and cannot be accessed in a way other than using JDI.
 				</script>
 			</section>
 
@@ -223,7 +222,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Lambda are generic typed. In runtime all those lambdas has the same signature.
+				Lambdas are generic typed. In runtime all those lambdas has the same signature.
 				```scala
 				Int => Int
 				Ala => Ola
@@ -234,7 +233,7 @@
 				
 				Of course we can type such lambdas using e.g. presentation compiler but we can't always rely on in.
 				
-				Why we can't always rely on PC? Have you ever used eclipse? :)
+				Why we can't always rely on PC? Have you ever used Eclipse? :)
 				</script>
 			</section>
 
@@ -250,7 +249,7 @@
 				Any => Dog.
 				```
 				
-				So when we missing generic types we can typed our lambdas as
+				So when we're missing generic types, we can type our lambdas as
 				```scala
 				Any => Any
 				```
@@ -260,12 +259,12 @@
 			<section data-markdown>
 				<script type="text/template">
 				
-				Filter from scala collection require 
+				Filter from Scala collection requires 
 				```scala
 				Any => Boolean
 				```
 
-				When we missing full generic types for our lambda then how can compile filter correctly?
+				When we're missing full generic types for our lambda, then how can we compile filter correctly?
 				</script>
 			</section>
 
@@ -290,9 +289,9 @@
 				<script type="text/template">
 				Class load steps:
 
-				1. Copile class to array of bytes
-				2. Send class bytes to debugged machine
-				2. Define class in classload on debugged jvm
+				1. Compile class to byte array
+				2. Send class bytecode to debugged machine
+				2. Define class in classload on debugged JVM
 				</script>
 			</section>
 
@@ -313,7 +312,7 @@
 				list => list.map(_ + 2)
 				```
 
-				To classload we should translate this pice fo code so it can be compiled to .class file.
+				To classload we should translate this piece fo code so it can be compiled to .class file.
 				</script>
 			</section>
 
@@ -325,7 +324,7 @@
 				user => user.isSutiable
 				```
 
-				is traslated to
+				is translated to
 
 				```scala
 				class CustomFunction extends Function1[User, Any]{
@@ -365,10 +364,10 @@
 				<script type="text/template">
 				### ClassListener
 
-				1. Rememeber all directories (packages) in toolbox output
+				1. Store all directories (packages) in toolbox output
 				1. Compile lambda
-				1. Find newly created directory (random nemed package)
-				1. Gather all classes containg predefined lambda name (e.g. CustomLambda) from it
+				1. Find newly created directory (random named package)
+				1. Gather all classes containing predefined lambda name (e.g. CustomLambda) from it
 
 				<br/>
 
@@ -384,13 +383,13 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				JDI allows us to send data to debugged jvm using:
+				JDI allows us to send data to debugged JVM using:
 
 				<br/>
 
-				##### Any primitive - Intellij way
+				##### Any primitive - IntelliJ way
 
-				create byte array on debugged jvm and set each byte
+				create byte array on debugged JVM and set each byte
 
 				<br/>
 
@@ -406,11 +405,11 @@
 
 				<br/>
 
-				#### We are limited to java/scala standard library on the side of debugged JVM.
+				#### We are limited to Java/Scala standard library on the side of debugged JVM.
 
 				<br/>
 
-				All other classes should be classload (what is not nice for even small lib containg ~20 class files)
+				All other classes should be classloaded (what is not nice even for small lib containing ~20 class files)
 				</script>
 			</section>
 
@@ -490,7 +489,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Simple scala lambda with closure
+				Simple Scala lambda with closure
 
 				```scala
 				val outer = 123
@@ -513,14 +512,14 @@
 				<script type="text/template">
 				What we need to do:
 
-				1. Find all clousre parameters
+				1. Find all closure parameters
 				2. Inject those values to created lambda
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				## Find all clousre parameters
+				## Find all closure parameters
 				</script>
 			</section>
 
@@ -551,14 +550,14 @@
 				<script type="text/template">
 				VariableProxyTraverser
 
-				Finds all unbound indetifiers.
+				Finds all unbound identifiers.
 
-				Value is bound if in current scope is:
+				Value is bound if current scope is:
 
 				1. value/variable/def definition
-				1. named paramter
+				1. named parameter
 				1. pattern in case or for-comprehension
-				1. is lambda implementation parameter
+				1. lambda implementation parameter
 
 				</script>
 			</section>
@@ -621,7 +620,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				In scala AST:
+				In Scala AST:
 
 				```scala
 				val constructorArgs =
@@ -727,3 +726,4 @@
 
 </body>
 </html>
+adventurous
