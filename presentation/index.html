@@ -226,47 +226,45 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Lambda are genericly typed. In runtime all those lambdas have the same signature.
+				Functions (lambdas) are genericly typed in Scala.
+
+				In runtime all those lambdas have the same signature.
 				```scala
 				Int => Int
 				Ala => Ola
 				String => Map[Int, Double]
 				```
 				
-				<br>
-				
 				Of course we can type such lambdas using e.g. presentation compiler but we can't always rely on it.
 				
-				Why we can't always rely on PC? Have you ever used Eclipse? :)
+				Why we can't always rely on PC?
+
+				Have you ever used Eclipse? :)
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
 				Luckily functions are contravariant (from argument point of view).
-				
 
-				```scala 
+
+				```scala
 				// everywhere when we need
 				Cat => Dog
-				// we can use 
+				// we can use
 				Any => Dog.
 				```
-				
+
 				When we're missing generic types, we can type our lambdas as
 				```scala
 				Any => Any
 				```
 				</script>
 			</section>
-			
+
 			<section data-markdown>
 				<script type="text/template">
-				
-				Filter from Scala collection requires 
-				```scala
-				Any => Boolean
-				```
+				Filter from Scala collection requires fucntion returning Boolean.
 
 				When we're missing full generic types for our lambda, then how can we compile filter correctly?
 				</script>
@@ -293,9 +291,9 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Class load steps:
+				Classload steps:
 
-				1. Compile class to byte array
+				1. Compile lamda to byte array (.class file)
 				2. Send class bytecode to debugged machine
 				2. Define class in classloader on debugged JVM
 				</script>
@@ -303,7 +301,9 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				###  Compile class to array of bytes
+				###  Compile lamda to byte array
+
+				.class file
 				</script>
 			</section>
 
@@ -344,6 +344,21 @@
 
 			<section data-markdown>
 				<script type="text/template">
+				### ClassListener
+
+				1. Remember all directories (packages) in toolbox output
+				1. Compile lambda
+				1. Find newly created directory (randomly named package)
+				1. Gather all classes containing predefined lambda name (e.g. CustomLambda) from it
+
+				<br/>
+
+				<div class="lefty">details: AnonymousFunctionSupport.scala</div>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
 				#### Toolbox compilation output
 
 				ls toolbox-output
@@ -363,21 +378,6 @@
 				__wrapper$1$07d42f7a083d4b319b3aa57cce3ac6ca$.class
 
 				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				### ClassListener
-
-				1. Store all directories (packages) in toolbox output
-				1. Compile lambda
-				1. Find newly created directory (randomly named package)
-				1. Gather all classes containing predefined lambda name (e.g. CustomLambda) from it
-
-				<br/>
-
-				<div class="lefty">details: AnonymousFunctionSupport.scala</div>
 				</script>
 			</section>
 
