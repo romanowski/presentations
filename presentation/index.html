@@ -79,7 +79,7 @@
 				## Plan
 
 				1. Why do I need lambdas for Scala code debugging?
-				2. Why labdas are not so trivial to support in tooling?
+				2. Why lambdas are not so trivial to support in tooling?
 				3. What is done to support lambdas in ScalaIDE debugger?
 
 				</script>
@@ -278,6 +278,8 @@
 			</section>
 		</section>
 
+		<!-- ################################################################################################################ -->
+
 		<section>
 			<section data-markdown>
 				<script type="text/template">
@@ -472,6 +474,8 @@
 			</section>
 		</section>
 
+		<!-- ################################################################################################################ -->
+
 		<section>
 			<section data-markdown>
 				<script type="text/template">
@@ -653,6 +657,8 @@
 			</section>
 		</section>
 
+		<!-- ################################################################################################################ -->
+
 		<section>
 			<section data-markdown>
 				<script type="text/template">
@@ -663,6 +669,221 @@
 		
 			<section data-markdown>
 				<script type="text/template">
+				The problem once again.
+
+				```scala
+				list.filter(_.isConnected)
+				```
+
+				When we know that list is List[Channel] task is simple.
+				The problem starts when we don't have such luxury.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				When we can rely only on JDI that has access to earused type information (we don't have more on JVM runtime).
+
+				Our lambda with or infirmation we have:
+				```scala
+				val list: List[_] = ???
+
+				list.filter(_.isConnected)
+				```
+
+				Is the List[_] the best what we can use?
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				When we can rely only on JDI that has access to earused type information (we don't have more on JVM runtime).
+
+				Our lambda with or infirmation we have:
+				```scala
+				val list: List[_] = ???
+
+				list.filter(_.isConnected)
+				```
+
+				Is the List[_] the best what we can use?
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				So maybe we should use some kind of dynamic typing?
+
+				hmmmmm, lets use Dynamic trait
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				```scala
+				trait JdiProxy extends Dynamic {
+				  /** Implementation of method application. */
+				  def applyDynamic(name: String)(args: Any*): JdiProxy = applyWithGenericType(name, genericThisType, args: _*)
+
+				  /** Implementation of field selection. */
+				  def selectDynamic(name: String): JdiProxy =
+				    callSpecialMethod(name, Seq()).getOrElse {
+				      __context.invokeMethod(this, genericThisType, name, Seq())
+				    }
+
+				  /** Implementation of variable mutation. */
+				  def updateDynamic(name: String)(value: Any): UnitJdiProxy =
+				    __context.invokeMethod(this, genericThisType, s"${name}_=", Seq(value.asInstanceOf[JdiProxy])).asInstanceOf[UnitJdiProxy]
+				  }
+				```
+
+				<div class="lefty">more: JdiProxy.scala</div>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				So our lambda become:
+				```scala
+				val list: List[JdiProxy] = ???
+
+				list.filter(_.isConnected)
+				//translated to
+				list.filter(_.selectDynamic("isConnected"))
+				```
+				typed as JdiProxy => JdiProxy
+
+				But it still does not compiles...
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Should we thrash JdiProxy?
+
+				JdiProxy => JdiProxy is enough in multiple places.
+
+				```scala
+				val list: List[JdiProxy] = ???
+
+				list.map(_.department)
+				```
+
+				Compiles and works fine.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Let's create non-compiling scala code:)
+
+				So our lambda become:
+				```scala
+				val list: List[JdiProxy] = ???
+				val
+
+				list.filter( (x: Chanell) => x.isConnected)
+				```
+				How does it compiles?
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Before we try to compile or typecheck our lambda we've got to transform in.
+
+				Plan:
+
+				1. Type all lambda parameters
+				2. Compile our lambda
+				3. Use type from just compiled lambda
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				How can we type all closure parameters?
+
+				Our code looks like this:
+				```scala
+				//variales declarations/imports/etc in our simple case:
+				val list: List[JdiProxy] = ???
+				val source: Source = ???
+
+				list.filter((x: Chanell) => x.isConnected(source))
+				```
+
+				We know names of all closure parameters.
+
+				Maybe toolbox can do it for us?
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Let's take all code from our expression up to the point of lambda and add placeholder methods with all colure types.
+
+				```scala
+				//variales declarations/imports/etc in our simple case:
+				val list: List[JdiProxy] = ???
+				val source: Source = ???
+
+				placeholder(source)
+				```
+
+				Now we are using toolbox typecheck method and traverse tree to gets type for all values pass to placeholder.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				```scala
+				new universe.Traverser {
+				  override def traverse(tree: universe.Tree): Unit = {
+				    tree match {
+				      case PlaceholderArgs(typedArgs) =>
+				        args = typedArgs
+				      case _ => super.traverse(tree)
+				    }
+				  }
+				}
+				```
+
+				```sacala
+				object PlaceholderArgs {
+				  def unapply(tree: Tree) = tree match {
+				    case Apply(on, args) if on.toString() == onString =>
+				      Some(args.map {
+				        case ident @ Ident(name: TermName) =>
+				          name -> TypeNames.getFromTree(ident)
+				      }(collection.breakOut))
+				    case _ => None
+				}
+				```
+
+				<div class="lefty">more: MockedTypeLambdas.scala</div>
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				Lambda compiled. We know that it is: (A, B) => C
+
+				Now we replace this lambda with
+				```scala
+				val code = s"""$contextName.$stubName[$retType]("$newFunctionType", $additionalArgs)"""
+				val ast = toolbox.parse(code)
+				```
+
+				And all finally compiles and works.
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
 				## Typing lambdas.
 
 				Especially when we cannot rely on Presentation Compiler
@@ -670,6 +891,8 @@
 				</script>
 			</section>
 		</section>
+
+		<!-- ################################################################################################################ -->
 
 		<section>
 			<section data-markdown>
