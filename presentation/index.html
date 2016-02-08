@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Using Lambdas for debugging Scala code </title>
+	<title>Perspective change: huge Scala project from tooling perspective</title>
 	<meta name="description" content="Perspective change: huge Scala project from tooling perspective">
 	<meta name="author" content="Piotr Kukielka, Krzysztof Romanowski">
 
@@ -100,7 +100,7 @@
 				2. Incremental. Keyword for speed and problems. - Krzysztof
 				3. Failures + recovery = stabliliy - ???
 				4. Code quality - Piotr
-				5. Repro: what can help? - Krzysztof
+				5. Tooling for support: in the search of repro- Krzysztof
 				6. ??? - ???
 
 				//kolejność do ustalenia - wpisałem losowo
@@ -211,6 +211,8 @@
 			<section data-markdown>
 				<script type="text/template">
 				4.2
+
+				aas
 				</script>
 
 			</section>
@@ -221,16 +223,160 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				5.1
+                Tooling for support: in the search of repro
+
+
+                Problems: reporting takes over solving
+				</script>
+
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				Usual thread on support mailing list
 				</script>
 
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				5.2
-				</script>
+				<div style="text-align: left;">
 
+				_I changed leaf project then compiled, but when I tried to run my application it compiled whole workspace._
+				</div>
+				<br>
+				<div style="text-align: right;">
+				_Can you give me more details?<br> Version of platform-X, branch/repository, installation detalis_
+				</div>
+				<br>
+				<div style="text-align: left;">
+				_Where I can find version of platform-X?_
+				</div>
+
+				... After multiple messages sent...
+
+				<div style="text-align: right;">
+					_Sorry I cannot reproduce your problem._
+				</div>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Similar problem was reported multiple times.
+
+				After hours spent of searching for repeatable repro problem was finally found and reported.
+
+				```scala
+				//Inside project A
+				trait X
+
+				class A
+				//commenting this line affacting ClassAsGenericBoundUsage on X
+				extends X
+
+				//Inside project B that depends on A
+
+				//This class will be compiled when line 5 is commented
+				class B {
+				//this has ClassAsGenericBoundUsage on X
+					def foo: Option[X] = None
+				}
+				```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Usually without reproduction cause cannot be found, so problem cannot be properly fixed/reported.
+
+				### How to find reproduction?
+
+				Tools always work at creator's machine...
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Problem with repros: even really small detail can matter
+
+				<img src="imgs/evenSmallDetali.png" style="background: none; border: none">
+
+
+				https://youtrack.jetbrains.com/issue/SCL-9532
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Wishful thinking...
+
+				<img src="imgs/steps-sbt.png" style="background: none; border: none">
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Manual approach
+
+				In the end tooling developer needs to find repro himself/herslelf.
+
+				The only think that can be approved is how many work needs to be put here.
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				## Error reports
+
+				1. Easy for end user: one click + short description
+				2. Powerful for developer: contains as much information as possible
+				3. Legal issues: cannot expose non-public code
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Statistics gathering
+
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Self-diagnostic tools
+
+				1. Deadlock detetction (from intellij)
+				2. Tweaks in ScalaIDE (named compilation threads)
+				3. API Changes from SBT's name hashing
+
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Beware! Support tools can break your tooling
+
+				1. Problems with namehashing api changes
+				2. Deadlock detection that breaks long compilations
+				3. Time losses on tracking
+
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## We kindy ask for:
+
+				1. Possibilty to log as much as possible.
+					What was compiled, what trigger change etc. We want to know what happens inside problematic ws!
+					//task for intellij - sbt as example
+				2. Allow us to easly connect with debugger. Intellij's compilePort FTW!
+				3. Time loss on traking
+
+				</script>
 			</section>
 
 		</section>
@@ -353,4 +499,3 @@
 
 </body>
 </html>
-adventurous
