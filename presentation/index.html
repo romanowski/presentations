@@ -5,8 +5,8 @@
 	<meta charset="utf-8">
 
 	<title>Using Lambdas for debugging Scala code </title>
-	<meta name="description" content="Presentation about using Lambdas for Scala code debugging, which is not so trivial to support in tooling">
-	<meta name="author" content="Krzysztof Romanowski">
+	<meta name="description" content="Perspective change: huge Scala project from tooling perspective">
+	<meta name="author" content="Piotr Kukielka, Krzysztof Romanowski">
 
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -51,18 +51,32 @@
 
 		<section data-markdown>
 			<script type="text/template">
+			### Piotr Kukielka
+
+			???@gmail.com
+
+			<div style="margin-left: 36% text-align: left;">
+				<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> pkukielka
+
+				<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> pkukielka
+
+			</div>
+
+			<br>
+
 			### Krzysztof Romanowski
 
 			romanowski.kr@gmail.com
 
 			<div style="margin-left: 36% text-align: left;">
 				<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
-				<br/>
+
 				<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> RomanowskiKr
 
 			</div>
 
 			<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
+
 			</script>
 		</section>
 
@@ -71,9 +85,9 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## Using Lambdas for debugging Scala code
+				## Perspective change:
+				huge Scala project from tooling perspective
 
-				not so trivial to support in tooling
 				</script>
 
 			</section>
@@ -82,202 +96,52 @@
 				<script type="text/template">
 				## Plan
 
-				1. Why do I need lambdas for Scala code debugging?
-				2. Why lambdas are not so trivial to support in tooling?
-				3. What is done to support lambdas in ScalaIDE debugger?
+				1. Tooling versioning. Challenge bigger then it seems. - Piotr
+				2. Incremental. Keyword for speed and problems. - Krzysztof
+				3. Failures + recovery = stabliliy - ???
+				4. Code quality - Piotr
+				5. Repro: what can help? - Krzysztof
+				6. ??? - ???
+
+				//kolejność do ustalenia - wpisałem losowo
 
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				I do not plan to introduce Expression Evaluator from ScalaIDE
-				
-				@Kwestor @mpociecha @pkukielka and @romanowski (me)
-				
-				Ask this guys for such presentation :)
+					This is not a presentation about sbt, CI or IDE.
+
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				All sources mentioned during presentation come from ScalaIDE expression evaluator.
+				This is sum of expierience in providing tooling that integrate all this comoponensts.
+				<br>
+				<br>
 
-				https://github.com/scala-ide/scala-ide/tree/master/org.scala-ide.sdt.debug.expression
-				</script>
-			</section>
-
-		</section>
-
-		<section>
-			<section data-markdown>
-				<script type="text/template">
-				## Why lambdas?
-				</script>
-
-			</section>
-			<section data-markdown>
-				<script type="text/template">
-				## Collections
-
-				```scala
-				departaments.groupBy(_.location)
-
-				employees.partition(employee => shouldBeTrusted(employee, "now"))
-
-				bigMap.filter{ case (k,v) => k.startsWith("some")}
-
-				entityList.map(_.nested1.nested2.nested3)
-
-				//And many, many more!
-				```
+				This is story how to provide scala workspaces for non-progrmers.
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				## Callbacks
+				Why do we need such tooling?
 
-				```scala
-				inTransaction {
-					findUsers()
-				}
-				```
-
-				```scala
-				var allUsers = Seq.empty[User]
-				onUsers(user => allUsers += user)
-				allUsers
-				```
-				</script>
-			</section>
-
-
-			<section data-markdown>
-				<script type="text/template">
-				And also combined as conditional breakpoints
-
-				```scala
-				users.forAll(_.salary > 4000)
-
-				multiList.exist(_.exist(_.isNamed))
-				
-				inContext(members.isEmpty)
-				```
-				</script>
-			</section>
-		</section>
-		<!-- ################################################################################################################ -->
-
-		<section>
-			<section data-markdown>
-				<script type="text/template">
-				#### not so trivial to support in tooling
-				# Why?
-				</script>
-
-			</section>
-			<section data-markdown>
-				<script type="text/template">
-				*Debugged JVM*: where application lives
-				<br> &#8593;&#8593;&#8593;
-				<br> JDI
-				<br> &#8593;&#8593;&#8593;
-				<br>*Debugging JVM*: where expression lives
+				//cos trzeba na swoja obrone powiedziec
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Our lamdas are created in *debugging* JVM
+				Presentation and examples can be found there:
+				<br>
 
-				but should live in *debugged* one.
+				//link do GH z gotową
 				</script>
 			</section>
 
-			<section data-markdown>
-				<script type="text/template">
-				### Problem 1:
-				JDI-based class loading
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				def myMethod(methodParam: Int): Unit = {
-				  val localParam: Int = 12
-				  //we are stopped at breakpoint here
-				}
-				```
-
-				Since method params and local values are not members of any object and cannot be accessed in a way other than using JDI.
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				### Problem 2:
-				Accessing runtime values:
-
-				method parameters and local variables
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Functions (lambdas) are generically typed in Scala.
-
-				In runtime all those lambdas have the same signature.
-				```scala
-				Int => Int
-				Ala => Ola
-				String => Map[Int, Double]
-				```
-				
-				Of course we can type such lambdas using e.g. presentation compiler but we can't always rely on it.
-				
-				Why we can't always rely on PC?
-
-				Have you ever used Eclipse? :)
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Luckily functions are contravariant (from arguments point of view).
-
-
-				```scala
-				// everywhere when we need
-				Cat => Dog
-				// we can use
-				Any => Dog.
-				```
-
-				When we're missing generic types, we can type our lambdas as
-				```scala
-				Any => Nothing
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Filter from Scala collection requires fucntion returning Boolean.
-
-				When we're missing full generic types for our lambda, then how can we compile filter correctly?
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				### Problem 3:
-				Typing lambdas.
-
-				Especially when we cannot rely on Presentation Compiler
-				</script>
-			</section>
 		</section>
 
 		<!-- ################################################################################################################ -->
@@ -285,649 +149,163 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## Jdi based class loading
+				1.1
 				</script>
+
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Classload steps:
-
-				1. Compile lamda to byte array (.class file)
-				2. Send class bytecode to debugged machine
-				2. Define class in classloader on debugged JVM
+				1.2
 				</script>
+
 			</section>
 
-			<section data-markdown>
-				<script type="text/template">
-				###  Compile lamda to byte array
-
-				.class file
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Usually lambdas look (or at least should look) like this:
-				```scala
-				_.toInt
-				//or
-				user => user.isSuitable
-				//or
-				list => list.map(_ + 2)
-				```
-
-				To classload this we should translate this piece of code so it can be compiled to .class file.
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Lambda:
-
-				```scala
-				user => user.isSutiable
-				```
-
-				is translated to
-
-				```scala
-				class CustomFunction extends Function1[User, Any]{
-				  override def apply(user) = user.isSuitable
-				}
-				```
-
-				and then compiled using toolbox.
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				### ClassListener
-
-				1. Remember all directories (packages) in toolbox output
-				1. Compile lambda
-				1. Find newly created directory (randomly named package)
-				1. Gather all classes containing predefined lambda name (e.g. CustomLambda) from it
-
-				<br/>
-
-				<div class="lefty">details: AnonymousFunctionSupport.scala</div>
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				#### Toolbox compilation output
-
-				ls toolbox-output
-				```
-				__wrapper$1$6dbe9210e60f458c98e6e4b9b720f085
-				__wrapper$16$f62dabc761474ea6bebf0555edaa9b11
-				__wrapper$1$6fea4b9cf7de4073a3181c519e4c0c6f
-				__wrapper$17$04134eae8de14694839ca932b6425c60
-				...
-				```
-
-				ls toolbox-output/new-package
-
-				```
-				__wrapper$1$07d42f7a083d4b319b3aa57cce3ac6ca.class
-				__wrapper$1$07d42f7a083d4b319b3aa57cce3ac6ca$CustomFunction$1.class
-				__wrapper$1$07d42f7a083d4b319b3aa57cce3ac6ca$.class
-
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				### Send class bytes to debugged machine
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				JDI allows us to send data to debugged JVM using:
-
-				<br/>
-
-				##### Any primitive - IntelliJ way
-
-				create byte array on debugged JVM and set each byte
-
-				<br/>
-
-				##### String  - ScalaIDE way
-
-				encode byte array as string, send and decode it again on debugged JVM (we use Base64)
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				**Side note** Serious limitation of creating JDI base tools:
-
-				<br/>
-
-				#### We are limited to Java/Scala standard library on the side of debugged JVM.
-
-				<br/>
-
-				All other classes should be classloaded (what is not nice even for a small lib containing ~20 class files)
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				// encode with base64
-				val localByteString = DatatypeConverter.printBase64Binary(code)
-
-				// send to JDI
-				val remoteByteStrings = jvm.mirrorOf(localByteString)
-
-				val dateTypeConverterClazzRef =
-				classByName("javax.xml.bind.DatatypeConverter")
-				val parseMethodName = "parseBase64Binary"
-				val parseMethod =
-				methodOn(dateTypeConverterClazzRef, parseMethodName, arity = 1)
-
-				// encoded
-				val remoteByteArray = dateTypeConverterClazzReference.
-				invokeMethod(currentThread, parseMethod, List(remoteByteStrings))
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				### Define class using classloader on debugged jvm
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				// defineClass(code: byte[], off: Int, len: Int)
-				val methodSignature = "([BII)Ljava/lang/Class;"
-
-				// obtain class loader for top stackframe class
-				val classLoaderRef =
-				  currentFrame.thisObject.referenceType.classLoader
-
-				val defineClassMethod = classLoaderRef.referenceType
-				  .methodsByName("defineClass", methodSignature).head
-
-				// load the class
-				classLoaderRef
-				  .invokeMethod(currentThread, defineClassMethod, classData)
-				  .asInstanceOf[ClassObjectReference]
-				```
-				</script>
-			</section>
-
-
-			<section data-markdown>
-				<script type="text/template">
-				## Jdi based class loading
-
-				<img src="imgs/solved.gif" style="background: none; border: none; margin-top: -60px">
-				</script>
-			</section>
 		</section>
-
 		<!-- ################################################################################################################ -->
 
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				### Accessing runtime values:
-
-				method parameters and local variables
+				2.1
 				</script>
+
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				## Closures
+				2.2
 				</script>
+
 			</section>
 
-			<section data-markdown>
-				<script type="text/template">
-				Simple Scala lambda with closure
-
-				```scala
-				val outer = 123
-				list.map(_ + outer)
-				```
-				is compiled to (excluding implicits)
-
-				```scala
-				val outer = 123
-				class Lambda(outer: Int) extends Function1[Int, Int] {
-					def apply(v: Int): Int = v + outer
-				}
-
-				list.map(new Lambda(outer))
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				What we need to do:
-
-				1. Find all closure parameters
-				2. Inject those values to created lambda
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				## Find all closure parameters
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				### Traverser
-
-				```scala
-				final override def traverse(tree: Tree): Unit = {
-				  tree match {
-				    // all identifiers
-				    case Ident(name: TermName) if !scopeManager.insideImport =>
-				       nameManager.registerUnboundName(name, tree, isLocal = false)
-
-				    // typed expression like x: Int
-				    case restTree @ Typed(impl, _) =>
-				       super.traverse(impl)
-
-				    case _ => super.traverse(tree)
-				  }
-				}
-				```
-				<div class="lefty">more:  UnboundValuesSupport.scala</div>
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				VariableProxyTraverser
-
-				Finds all unbound identifiers.
-
-				Value is bound if, in current scope, it is either:
-
-				1. value/variable/def definition or,
-				1. named parameter or,
-				1. pattern in case or for-comprehension or,
-				1. lambda implementation parameter
-
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Wait! What about packages?
-
-				```scala
-				_ => mutable.Set.empty[String]
-				```
-				mutable is unbound!
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				The biggest AST transformer problem:
-
-				#### You always forget about some tree shapes!
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Sidenote
-
-				Toolbox has poor support for packages.
-
-				https://issues.scala-lang.org/browse/SI-6393
-
-				Reason: Packages are "phantom" in JVM implementation (cannot be enumerated simply).
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				## Inject closure values to created lambda
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Let's translate
-
-				```scala
-				val closureParam = 1
-				list.map(_ + closureParam)
-				```
-				to
-
-				```scala
-				val closureParam = 1
-				list.map(
-				__contex.newInstance("random-lambda-name", Seq(closureParam))
-				```
-
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				In Scala AST:
-
-				```scala
-				val constructorArgs =
-					Literal(Constant(newFunctionType)) ::
-					Apply(SelectApplyMethod("Seq"), closureArgs) ::
-					Nil
-
-				//__contex.newInstance("random-lambda-name", Seq(closureParam))
-				val newInstanceCall = Apply(
-				  Select(
-				    Ident(TermName(Debugger.contextParamName)),
-				    TermName(Debugger.newInstance)
-				   ),
-				  constructorArgs
-				)
-				```
-
-				</script>
-			</section>
-
-
-			<section data-markdown>
-				<script type="text/template">
-				### Accessing runtime values:
-
-				method parameters and local variables
-
-				<img src="imgs/solved.gif" style="background: none; border: none; margin-top: -60px">
-				</script>
-			</section>
 		</section>
-
 		<!-- ################################################################################################################ -->
 
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## Typing lambdas
+				3.1
 				</script>
-			</section>
-		
-		
-			<section data-markdown>
-				<script type="text/template">
-				The problem:
 
-				```scala
-				list.filter(_.isConnected)
-				```
-
-				When we know that list is typed as
-				```scala
-				val list: List[Channel] = ...
-				```
-				task is simple.
-
-				The problem starts when we don't have such luxury.
-				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				When we can rely only on JDI we have access to erased types (there is nothing more in JVM runtime).
-
-				<br/>
-
-				```scala
-				val list: List[_] = ???
-				val source: Source = ???
-
-				list.filter(_.isConnected(source))
-				```
-
-				Is List[_] the best what we can use?
+				3.2
 				</script>
+
 			</section>
 
-			<section data-markdown>
-				<script type="text/template">
-				So maybe we should use some kind of dynamic typing?
-
-				Let's use Scala's Dynamic trait!
-				</script>
-			</section>
-
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				trait JdiProxy extends Dynamic {
-
-				  /** Implementation of method application. */
-				  def applyDynamic(name: String)(args: Any*): JdiProxy =
-				    applyWithGenericType(name, genericThisType, args: _*)
-
-				  /** Implementation of field selection. */
-				  def selectDynamic(name: String): JdiProxy =
-				    callSpecialMethod(name, Seq()).getOrElse {
-				      __context.invokeMethod(this, genericThisType, name, Seq())
-				    }
-				  }
-				```
-
-				<div class="lefty">more: JdiProxy.scala</div>
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Our lambda becomes:
-				```scala
-				val list: List[JdiProxy] = ???
-				val source: Source = ???
-
-				list.filter(_.isConnected(source))
-				//translated to
-				list.filter(_.applyDynamic("isConnected")(source))
-				```
-				typed as JdiProxy => JdiProxy
-
-				But it still does not compile...
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Should we thrash JdiProxy?
-
-				JdiProxy => JdiProxy is enough in multiple places.
-
-				```scala
-				val list: List[JdiProxy] = ???
-
-				list.map(_.department)
-				```
-
-				Compiles and works fine.
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Back to the filter.
-
-				Let's create non-compiling scala code :)
-
-				```scala
-				val list: List[JdiProxy] = ???
-				val source: Source = ???
-
-				list.filter( (x: Chanel) => x.isConnected(source))
-				```
-				How we can compile this?
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Before we try to compile or typecheck our lambda we've got to transform it.
-
-				Plan:
-
-				1. Type all lambda parameters
-				2. Compile our lambda
-				3. Use type from just compiled lambda
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				How can we type all closure parameters?
-
-				Maybe toolbox can do it for us?
-
-				Plan:
-
-				1. Take code proceeding our lambda
-				2. Add placeholder methods with all closure types
-				2. Typecheck it and gather types
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Our expression is temporarily transformed to:
-
-				```scala
-				//variables declarations/imports/etc in our simple case:
-				val list: List[JdiProxy] = ???
-				val source: Source = ???
-
-				placeholder(source)
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Traversing:
-
-				```scala
-				new universe.Traverser {
-				  override def traverse(tree: universe.Tree): Unit = {
-				    tree match {
-				      case PlaceholderArgs(typedArgs) =>
-				        args = typedArgs
-				      case _ => super.traverse(tree)
-				    }
-				  }
-				}
-				```
-				<div class="lefty">more: MockedTypeLambdas.scala</div>
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Gathering types:
-
-				```sacala
-				object PlaceholderArgs {
-				  def unapply(tree: Tree) = tree match {
-				    case Apply(on, args) if on.toString() == onString =>
-				      Some(args.map {
-				        case ident @ Ident(name: TermName) =>
-				          name -> TypeNames.getFromTree(ident)
-				      }(collection.breakOut))
-				    case _ => None
-				}
-				```
-
-				<div class="lefty">more: MockedTypeLambdas.scala</div>
-				</script>
-			</section>
-
-
-			<section data-markdown>
-				<script type="text/template">
-				Lambda compiled. We know that it is: (A, B) => C
-
-				```scala
-				val list: List[JdiProxy] = ???
-				val source: Source = ???
-
-				list.filter(__context.placeholderFunction[Boolean](
-				  "compiled-type",
-				  Seq(source)
-				)
-				```
-
-				Code finally compiles and works.
-				</script>
-			</section>
-
-
-			<section data-markdown>
-				<script type="text/template">
-				## Typing lambdas.
-
-				Especially when we cannot rely on Presentation Compiler
-				<img src="imgs/solved.gif" style="background: none; border: none; margin-top: -40px">
-				</script>
-			</section>
 		</section>
+		<!-- ################################################################################################################ -->
 
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+				4.1
+				</script>
+
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				4.2
+				</script>
+
+			</section>
+
+		</section>
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+				5.1
+				</script>
+
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				5.2
+				</script>
+
+			</section>
+
+		</section>
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+				6.1
+				</script>
+
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				6.2
+				</script>
+
+			</section>
+
+		</section>
+		<!-- ################################################################################################################ -->
+
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+				Podsumowanie 1
+				</script>
+
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Podsumowanie 2
+				</script>
+
+			</section>
+
+		</section>
 		<!-- ################################################################################################################ -->
 
 		<section>
 
-			<section>
-				<video loop="loop">
-					<source src="imgs/crocs.webm" type="video/webm"/>
-				</video>
-			</section>
-
 			<section data-markdown>
 				<script type="text/template">
-				## Contribute for your and greater good!
+				<!--to jest kopia 1 slajdu-->
+				### Piotr Kukielka
 
-				github.com/scala-ide/scala-ide
+				???@gmail.com
+
+				<div style="margin-left: 36% text-align: left;">
+					<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> pkukielka
+
+					<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> pkukielka
+
+				</div>
+
+				<br>
+
+				### Krzysztof Romanowski
+
+				romanowski.kr@gmail.com
+
+				<div style="margin-left: 36% text-align: left;">
+					<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
+
+					<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> RomanowskiKr
+
+				</div>
+
+				<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
+
 				</script>
 			</section>
-			
-			<section data-markdown>
-			<script type="text/template">
-			### Krzysztof Romanowski
-
-			romanowski.kr@gmail.com
-
-			<div style="margin-left: 36% text-align: left;">
-				<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
-				<br/>
-				<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> RomanowskiKr
-
-			</div>
-
-			<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
-			</script>
-		</section>
 		</section>
 
 		<!-- ################################################################################################################ -->
