@@ -393,17 +393,6 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				## Nuclear recovery
-				(e.g. new workspace, Intellij's Rebuild project)
-
-				Required minimum.
-
-				The only problem is that nukes are expensive.
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
 				_from on support mailing list_
 				</script>
 			</section>
@@ -428,9 +417,10 @@
 				</script>
 			</section>
 
-
 			<section data-markdown>
 				<script type="text/template">
+				Problem:
+
 				Cleaning classes in Intellij's "Compile module xxx" is based on cache.
 
 				Cache sometimes gets corrupted.
@@ -439,17 +429,42 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Random corruptions (in cache, metadata) are really hard to track.
+				Such random corruptions (in cache, metadata) are really hard to identify.
 
-				In most cases the only solution we can offer is targeted clean/invalidation.
-
-				Basically targeted recovery.
+				In most cases the only solution we can offer is some kind of recovery strategy.
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Example: "Compile module xxx" cache corruption
+				## Nuclear recovery
+				(e.g. new workspace, Intellij's Rebuild project)
+
+				Required minimum.
+
+				The only problem is that nukes are expensive.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Can we do better?
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				### Targeted recovery?
+
+				Quick and precise recovery strategy.
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				Example
+				_For mentioned  "Compile module xxx" cache corruption problem_
 
 				Brute force clean that removes all classes (implemented by us).
 
@@ -461,9 +476,11 @@
 				<script type="text/template">
 				## Why this is so important?
 
-				If user can fix most of problem in few minuets with one click, this gives a feel of stablity.
+				If user can fix most of problem in few minuets with one click, this gives a feel of stability.
 
-				If tooling works fine in 90% of time but in case of failure it needs hours to fix then it feels as instable.
+				If tooling works fine in 90% of time but in case of failure it needs hours to fix then it feels as unstable.
+
+				(especially under deadline pression)
 				</script>
 			</section>
 
