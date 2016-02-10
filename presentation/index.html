@@ -368,16 +368,97 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				3.1
+				### Stability starts with recovery
 				</script>
 
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				3.2
+				There is no way that IDE will never broke.
 				</script>
+			</section>
 
+			<section data-markdown>
+				<script type="text/template">
+				Even if IDE breaks once a year in 365 workspaces it will break every day.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Nuclear recovery
+				(e.g. new workspace, Intellij's Rebuild project)
+
+				Required minimum.
+
+				The only problem is that nukes are expensive.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				_from on support mailing list_
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				<div style="text-align: left;">
+					_I compiled my project, I got exception from compiler (...).
+					Rebuilding and compiling project don't help.
+					I don't change anything it that project (it is dependecy of my work)."_
+				</div>
+				<br>
+				<div style="text-align: right;">
+					_This is known problem. Please rebuild whole workspace and it should be gone._
+				</div>
+				<br>
+				<div style="text-align: left;">
+					_Thanks, it helped.
+					However full build takes over 30 min, and I have to do it for no reason once a week.
+					Can we do sth about this?_
+				</div>
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				Cleaning classes in Intellij's "Compile module xxx" is based on cache.
+
+				Cache sometimes gets corrupted.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Random corruptions (in cache, metadata) are really hard to track.
+
+				In most cases the only solution we can offer is targeted clean/invalidation.
+
+				Basically targeted recovery.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				Example: "Compile module xxx" cache corruption
+
+				Brute force clean that removes all classes (implemented by us).
+
+				Fast, reliable recovery for single project compilation.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Why this is so important?
+
+				If user can fix most of problem in few minuets with one click, this gives a feel of stablity.
+
+				If tooling works fine in 90% of time but in case of failure it needs hours to fix then it feels as instable.
+				</script>
 			</section>
 
 		</section>
@@ -566,16 +647,17 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				6.1
+				Radnom points.
 				</script>
 
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				6.2
-				</script>
+				If you got task that produce no output and after minute it prints "OK" it is consider as long.
 
+				If the same task prints information every 5 secs it is consider as not that long.
+				</script>
 			</section>
 
 		</section>
