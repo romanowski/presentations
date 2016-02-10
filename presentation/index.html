@@ -98,10 +98,10 @@
 
 				1. Tooling provisioning. Challenge bigger then it seems - Piotr
 				2. Incremental. Keyword for speed and problems - Krzysztof
-				3. Failures + recovery = stabliliy - ???
+				3. Stability starts with recovery
 				4. Code quality - Piotr
 				5. Tooling for support: in the search of repro- Krzysztof
-				6. ??? - ???
+				6. Bonus. The strangest caeses we ever saw.
 
 				//kolejność do ustalenia - wpisałem losowo
 
@@ -258,18 +258,95 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				2.1
+				## Incremental
+				#### Keyword for speed and potential problems
 				</script>
-
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				2.2
+				Is always incremental compilation faster?
 				</script>
-
 			</section>
 
+
+			<section data-markdown>
+				<script type="text/template">
+				Incremental can compilation be almost x3 slower.
+
+				<img src="imgs/sbt-fix.png" style="background: none; border: none">
+
+				https://github.com/romanowski/sbt/pull/1/files
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Why, oh why?
+
+				Incremental compilation is done in cycles.
+
+				Compile 5% later 20% later 60% and whole project in the end will take more time then full compile.
+
+				Don't worry - this was result of mentioned problem.
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				_from on support mailing list_
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				<div style="text-align: left;">
+					_I compiled my project, all went fine. I tried to run my app and it fails with "No class def found"_
+				</div>
+				<br>
+				<div style="text-align: right;">
+					_Did you try to clean-build (rebuild) your project?_
+				</div>
+				<br>
+				<div style="text-align: left;">
+					_Full compilation failed (correctly). Why previous compilation was successful?_
+				</div>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## False Positives
+				The biggest problem of incremental compilation
+
+				<img src="imgs/false-positives.png" style="background: none; border: none">
+
+				https://gist.github.com/romanowski/ae0da962a8b165e085db
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Bugs, bugs, bugs
+
+				The bigger your workspace is the more bug you can face and they will hit more.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				### Speed
+
+				We can't ask to spent ~30 minutes (this is actual number) on compilation for each change
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				### Incremental compilation is always balance between stability and speed.
+				</script>
+			</section>
 		</section>
 		<!-- ################################################################################################################ -->
 
@@ -314,14 +391,11 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-                Tooling for support: in the search of repro
+				## Tooling for support:
 
-
-                Problems: reporting takes over solving
+				#### in the search of repro
 				</script>
-
 			</section>
-
 
 			<section data-markdown>
 				<script type="text/template">
@@ -333,7 +407,6 @@
 			<section data-markdown>
 				<script type="text/template">
 				<div style="text-align: left;">
-
 				_I changed leaf project then compiled, but when I tried to run my application it compiled whole workspace._
 				</div>
 				<br>
@@ -448,7 +521,8 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				## Beware! Support tools can break your tooling
+				## Beware!
+				It can break your tooling
 
 				1. Problems with namehashing api changes
 				2. Deadlock detection that breaks long compilations
@@ -459,13 +533,14 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				## We kindy ask for:
+				#### All tools developers, we kindy ask for:
 
 				1. Possibilty to log as much as possible.
-					What was compiled, what trigger change etc. We want to know what happens inside problematic ws!
-					//task for intellij - sbt as example
-				2. Allow us to easly connect with debugger. Intellij's compilePort FTW!
-				3. Time loss on tracking
+					<br>What was compiled, what trigger change etc.
+					<br>We want to know what happens inside problematic ws!
+				2. Allow us to easily connect with debugger. Intellij's compiler.debug.port FTW!
+				3. Tag your releases. Documentation is never enough. We want see actual code
+				4. Don't depend on snapshots in releases. Later you are always missing them
 
 				</script>
 			</section>
@@ -575,15 +650,6 @@
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
-
-
-
-
-
-
-
-
-
 
 
 </script>
