@@ -53,7 +53,7 @@
 			<script type="text/template">
 			### Piotr Kukielka
 
-			???@gmail.com
+			piotr.kukielka@gmail.com
 
 			<div style="margin-left: 36% text-align: left;">
 				<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> pkukielka
@@ -96,8 +96,8 @@
 				<script type="text/template">
 				## Plan
 
-				1. Tooling versioning. Challenge bigger then it seems. - Piotr
-				2. Incremental. Keyword for speed and problems. - Krzysztof
+				1. Tooling provisioning. Challenge bigger then it seems - Piotr
+				2. Incremental. Keyword for speed and problems - Krzysztof
 				3. Failures + recovery = stabliliy - ???
 				4. Code quality - Piotr
 				5. Tooling for support: in the search of repro- Krzysztof
@@ -147,19 +147,110 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown>
-				<script type="text/template">
-				1.1
-				</script>
+			<section data-markdown><script type="text/template">
+				#Tooling provisioning
 
-			</section>
+				###Challenge bigger than it seems
+			</script></section>
 
-			<section data-markdown>
-				<script type="text/template">
-				1.2
-				</script>
+			<section data-markdown><script type="text/template">
+				###What does the 'tooling' really mean?
 
-			</section>
+				* Build automation systems, build scripts
+				* IDEs with proper project structure and settings
+				* Additional programs being part of the ecosystem
+				* CI, test and prod environments
+				* Distributed builds, caches...
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				<div style="text-align: center;">
+					One Tooling to rule them all,<br>
+					One Tooling to find them,<br>
+					One Tooling to bring them all<br>
+					and in the darkness bind them
+				</div>
+				<br>
+				<div style="text-align: center;">
+					<img src="imgs/One_Ring_inscription.png" style="background: none; border: none">
+				</div>
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###What we have to provide?
+
+				* Support for multiple repositories
+				* Effortless upgrades and downgrades
+				* Quick way to setup/reset whole environment
+
+				Sounds easy?
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Problems
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###No Ide is designed for that
+
+				* Synchronization with build scripts is lacking
+				* Re-generation of project structure takes minutes
+				* Commandline options support is poor
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###We have to support multiple environments/workspaces
+				* Dozens of environments at the same time
+				* On different machines with different operating systems
+				* Each can be upgraded or downgraded at any time by pull or branch change
+				* Each can be fixed or restored - and depending on the failure severity it should be as quick as possible<br><br>
+
+				####Existing solutions falls short.
+			</script></section>
+
+
+			<section data-markdown><script type="text/template">
+				###Tooling need to reach outsie of user machine
+
+				* Scala desperately need distributed compilation or external caching
+				* Working implementation of distributed compilation in Scala does not exist
+				* Caching requires a lot of resources, proper synchronization and custom extensions to your commandline and IDE build systems
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Tooling should be able to fix itself
+
+				With over 1M line of code and hundreds of developers:
+
+				* IDEs will be breaking 'randomly'
+				* Incremental compiler will be breaking 'randomly'
+				* Everything else will... you get it :)<br><br>
+
+				####At very least you need some way to:
+
+				* Report the problem and make reproduction easier
+				* **Fix user environment**
+			</script></section>
+
+
+			<section data-markdown><script type="text/template">
+				###And should be smart about it
+
+				Sure, you can always recreate whole workspace.
+
+				But users does not like to wait.
+
+				We try to fix only what is broken.
+
+				The same applies for upgrades and downgrades.
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###"Entropy of an isolated system never decreases"
+
+				###And so our fight :)
+			</script></section>
+
 
 		</section>
 		<!-- ################################################################################################################ -->
@@ -289,7 +380,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Usually without reproduction cause cannot be found, so problem cannot be properly fixed/reported.
+				Usually without reproduction cause cannot be found,<br/>so problem cannot be properly fixed/reported.
 
 				### How to find reproduction?
 
@@ -348,7 +439,7 @@
 				<script type="text/template">
 				## Self-diagnostic tools
 
-				1. Deadlock detetction (from intellij)
+				1. Deadlock detetction (from Intellij)
 				2. Tweaks in ScalaIDE (named compilation threads)
 				3. API Changes from SBT's name hashing
 
@@ -374,7 +465,7 @@
 					What was compiled, what trigger change etc. We want to know what happens inside problematic ws!
 					//task for intellij - sbt as example
 				2. Allow us to easly connect with debugger. Intellij's compilePort FTW!
-				3. Time loss on traking
+				3. Time loss on tracking
 
 				</script>
 			</section>
@@ -426,7 +517,7 @@
 				<!--to jest kopia 1 slajdu-->
 				### Piotr Kukielka
 
-				???@gmail.com
+				piotr.kukielka@gmail.com
 
 				<div style="margin-left: 36% text-align: left;">
 					<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> pkukielka
