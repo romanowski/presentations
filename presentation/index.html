@@ -154,9 +154,9 @@
 
 		<section>
 			<section data-markdown><script type="text/template">
-				#Tooling provisioning
+				##Tooling provisioning
 
-				###Challenge bigger than it seems
+				####Challenge bigger than it seems
 			</script></section>
 
 			<section data-markdown><script type="text/template">
@@ -265,14 +265,6 @@
 
 				The same applies for upgrades and downgrades.
 			</script></section>
-
-			<section data-markdown><script type="text/template">
-				###"Entropy of an isolated system never decreases"
-
-				###And so our fight :)
-			</script></section>
-
-
 		</section>
 		<!-- ################################################################################################################ -->
 
@@ -374,7 +366,7 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				### Stability starts with recovery
+				## Stability starts with recovery
 				</script>
 
 			</section>
@@ -488,21 +480,115 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown>
-				<script type="text/template">
-				4.1
-				</script>
+			<section data-markdown><script type="text/template">
+				##Code quality
 
-			</section>
+				####Good practices and help from the tooling
+			</script></section>
 
-			<section data-markdown>
-				<script type="text/template">
-				4.2
+			<section data-markdown><script type="text/template">
+				##Tools will not save you
 
-				aas
-				</script>
+				If you want to write bad, hard to maintain code, you are doomed anyway.
+			</script></section>
 
-			</section>
+			<section data-markdown><script type="text/template">
+				##But you can help yourself and the tools
+
+				####All you need is:
+
+				* Set of god practices
+				* A bit of discipline
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				##Good practices
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###If something should be private, make it private
+
+				It's especially important in case commonly used objects, where you can avoid a lot of recompilation.
+
+				Sbt name hashing partially mitigates this problem.
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Explicitly specify type of public methods
+
+				Compiler can infer type other than you think or make it more spcific than you need.
+
+				You don't want that.
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Compose traits to create bigger objects and classes
+
+				```scala
+				trait Programmer
+				trait Administrator
+
+				class DevOps extends Programmer with Administrator
+				```
+				```scala
+				object Operations {
+					def rebootMachine(admin: Administrator) = ???
+				}
+				```
+
+				Changing `Programmer` have no effect on `Operations`.
+				Just because `DevOps` class is not one big ball of mud.
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Minimize the scope of implicits
+
+				* Implicit resolution can significantly increase compilation time
+				* Overuse of non-local implicits can be hard to understand
+				* There is no tool which could do this job for you
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Use typeclasses if they are right tool for the job
+
+				* Your classes won't overgrow unnecessarily
+				* You can limit scope of recompilation when working on typeclasses instead of the target class body
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				##So what tools can do for you?
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Code Formatting
+
+				* Scalariform and other external formatters
+				* IntelliJ and ScalaIDE formatters - incompatible :(
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Linters and static analysers
+
+				* IntelliJ Inspections
+				* Wart remover https://github.com/typelevel/wartremover
+				* Linter https://github.com/HairyFotr/linter
+				* CPD https://github.com/sbt/cpd4sbt
+				* Abide https://github.com/scala/scala-abide
+				* Scapegoat https://github.com/sksamuel/scalac-scapegoat-plugin
+
+				Most of that tools is still work in  progress though.
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###And there is still a lot to be done...
+
+				####To name few possible problems:
+
+				* Automatic type insertion (for public methods) - no tool can reliably do it for whole codebase
+				* Implicits scope analyse, reporting, and auto-fixing
+
+				Building that kind of tools should become easier with scala.meta -  when it will be there.
+			</script></section>
 
 		</section>
 		<!-- ################################################################################################################ -->
