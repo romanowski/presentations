@@ -192,7 +192,7 @@
 				###Problems & solutions
 			</script></section>
 
-			<section data-markdown data-background="#59372F"><script type="text/template">
+			<section data-markdown data-background="#b5533c"><script type="text/template">
 				###Problem: We have to support multiple environments/workspaces
 
 				* Dozens of environments at the same time
@@ -233,7 +233,7 @@
 				Differet granuality of 'clean and restore' actions is required.
 			</script></section>
 
-			<section data-markdown data-background="#59372F"><script type="text/template">
+			<section data-markdown data-background="#b5533c"><script type="text/template">
 				###Problem: No Ide can handle it automatically
 
 				* Synchronization with build scripts is lacking
@@ -270,7 +270,7 @@
 				* Everytihing else <br> (just go straight to the sources :))
 			</script></section>
 
-			<section data-markdown data-background="#59372F"><script type="text/template">
+			<section data-markdown data-background="#b5533c"><script type="text/template">
 				###Problem: Tooling need to make up for Scala shortcomings
 				* Scala desperately need distributed compilation or external caching
 				* Working implementation of distributed compilation in Scala does not exist
@@ -324,7 +324,7 @@
 				* Bugs in sbt incremental compilation can kill you
 			</script></section>
 
-			<section data-markdown data-background="#59372F"><script type="text/template">
+			<section data-markdown data-background="#b5533c"><script type="text/template">
 				###Problem: Tooling should be resistant to random failures
 
 				With over 1M line of code and hundreds of developers:
@@ -347,7 +347,7 @@
 				What you can do is report th problem and recover from error. Mostly by partial or full re-creation of the workspace.
 			</script></section>
 
-			<section data-markdown data-background="#59372F"><script type="text/template">
+			<section data-markdown data-background="#b5533c"><script type="text/template">
 				###Problem: Often tools are not enough (or are not good enough)
 			</script></section>
 
@@ -389,14 +389,14 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Is always incremental compilation faster?
+				Is incremental compilation always faster?
 				</script>
 			</section>
 
 
 			<section data-markdown>
 				<script type="text/template">
-				Incremental can compilation be almost x3 slower.
+				Incremental compilation can be almost x3 slower.
 
 				<img src="imgs/sbt-fix.png" style="background: none; border: none">
 
@@ -410,7 +410,7 @@
 
 				Incremental compilation is done in cycles.
 
-				Compile 5% later 20% later 60% and whole project in the end will take more time then full compile.
+				Compile 5%, later 20%, later 60%, and whole project in the end will take more time than full compile.
 
 				Don't worry - this was result of mentioned problem.
 				</script>
@@ -419,7 +419,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				_from on support mailing list_
+				_from support mailing list_
 				</script>
 			</section>
 
@@ -454,7 +454,7 @@
 				<script type="text/template">
 				## Bugs, bugs, bugs
 
-				The bigger your workspace is the more bug you can face and they will hit more.
+				The bigger your workspace is the more bugs you can face and they will hit more.
 				</script>
 			</section>
 
@@ -462,7 +462,7 @@
 				<script type="text/template">
 				### Speed
 
-				We can't ask to spent ~30 minutes (this is actual number) on compilation for each change
+				We can't ask to spend ~30 minutes (this is actual number) on compilation for each change
 				</script>
 			</section>
 
