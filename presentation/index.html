@@ -96,7 +96,7 @@
 				<script type="text/template">
 				## Plan
 
-				1. Tooling provisioning. Challenge bigger then it seems - Piotr
+				1. Tooling at scale. Challenge bigger then it seems - Piotr
 				2. Incremental. Keyword for speed and problems - Krzysztof
 				3. Stability starts with recovery
 				4. Code quality - Piotr
@@ -135,7 +135,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				This is story how about failing tooling.
+				This is story about failing tooling.
 				</script>
 			</section>
 
@@ -154,7 +154,7 @@
 
 		<section>
 			<section data-markdown><script type="text/template">
-				##Tooling provisioning
+				##Tooling at scale
 
 				####Challenge bigger than it seems
 			</script></section>
@@ -182,45 +182,24 @@
 				</div>
 			</script></section>
 
-
-			<section data-markdown><script type="text/template">
-				###How does our infrastructure looks like?
-
-				* Each repository contains different code and build scripts, but part of the build infrastructure is common
-				* Tooling version is commited into version file (so it is subject to change during code pulls and branch changes)
-			</script></section>
-
-			<section data-markdown><script type="text/template">
-				<div style="text-align: center;">
-					<img src="imgs/tooling.png" style="background: none; border: none">
-				</div>
-
-			</script></section>
-
 			<section data-markdown><script type="text/template">
 				###What we have to provide?
 
 				* Support for multiple repositories
 				* Effortless upgrades and downgrades
 				* Quick way to setup/reset whole environment
+				* Good IDE integration and synchronization
 
-				Sounds easy?
+				Sounds easy, right?
 			</script></section>
 
 			<section data-markdown><script type="text/template">
-				###Problems
+				###Problems & solutions
 			</script></section>
 
-			<section data-markdown><script type="text/template">
-				###No Ide is designed for that
+			<section data-markdown data-background="#59372F"><script type="text/template">
+				###Problem: We have to support multiple environments/workspaces
 
-				* Synchronization with build scripts is lacking
-				* Re-generation of project structure takes minutes
-				* Commandline options support is poor
-			</script></section>
-
-			<section data-markdown><script type="text/template">
-				###We have to support multiple environments/workspaces
 				* Dozens of environments at the same time
 				* On different machines with different operating systems
 				* Each can be upgraded or downgraded at any time by pull or branch change
@@ -229,43 +208,180 @@
 				####Existing solutions falls short.
 			</script></section>
 
+			<section data-markdown data-background="#2F5938"><script type="text/template">
+				###Solution: Version change management
+			</script></section>
 
 			<section data-markdown><script type="text/template">
-				###Tooling need to reach outsie of user machine
+				###How does our infrastructure looks like?
 
+				* Each repository contains different code and build scripts, but part of the build infrastructure is common
+				* Tooling version is commited into version file (so it is subject to change during code pulls and branch changes)
+
+				<div style="text-align: center;">
+					<img src="imgs/tooling.png" style="background: none; border: none">
+				</div>
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###When version changes...
+
+				Tooling need to be able to discover changes in:
+
+				* IDE version
+				* Project structure
+				* Config scripts
+				* And more...
+
+				And update accordingly.
+
+				Differet granuality of 'clean and restore' actions is required.
+			</script></section>
+
+			<section data-markdown data-background="#59372F"><script type="text/template">
+				###Problem: No Ide can handle it automatically
+
+				* Synchronization with build scripts is lacking
+				* Re-generation of project structure takes minutes
+				* Commandline options support is poor
+				* Some options, like building custom compler plugin as part of the build, are missing
+			</script></section>
+
+			<section data-markdown data-background="#2F5938"><script type="text/template">
+				###Solution (ideal world): <br>Improve integration with build scripts
+				<br>
+				###Solution (real world): <br>Hack over each problem
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Project files regeneration
+
+				You need to choose if you prefer accuracy or speed.
+
+				Not every change in build files causes change in project structure.
+
+				We let users to decide.
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Custom requirements
+
+				Better learn how to write IDE plugins.
+
+				You will have to hack:
+
+				* Presentation compiler support <br> (google for: *IntelliJ API to Build Scala Macros Support*)
+				* Builders <br> (google for: *External Builder API and Plugins*)
+				* Everytihing else <br> (just go straight to the sources :))
+			</script></section>
+
+			<section data-markdown data-background="#59372F"><script type="text/template">
+				###Problem: Tooling need to make up for Scala shortcomings
 				* Scala desperately need distributed compilation or external caching
 				* Working implementation of distributed compilation in Scala does not exist
 				* Caching requires a lot of resources, proper synchronization and custom extensions to your commandline and IDE build systems
 			</script></section>
 
+
+			<section data-markdown data-background="#2F5938"><script type="text/template">
+				###Solution: Smart caching
+			</script></section>
+
 			<section data-markdown><script type="text/template">
-				###Tooling should be able to fix itself
+				###Get help form the CI
+
+				If some project have no sources changed, why not use jars generated by CI?
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				####Subproblems:
+
+				* How to discover if there are "no sources changed"
+				* How to invalidate caches/jars on CI (it will grow FAST)
+
+				<br>
+
+				####Downsides:
+
+				* You need separate implementation for both commandline and IDE build
+				* Change in one file causes re-compilation of the whole project
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Get help form the CI - second approach
+
+				Use sbt build with name hashing enabled.<br>
+				Let the incremental compilation do the job.
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				####Benefits:
+
+				* You don't need exact cache hit anymore
+				* Change in one file causes smallest possible recompilation
+				* You need less space on CI side
+				* If your IDE support sbt build you can have almost the same implementation for both commandline and IDE build
+
+				<br>
+
+				####Downsides:
+
+				* Bugs in sbt incremental compilation can kill you
+			</script></section>
+
+			<section data-markdown data-background="#59372F"><script type="text/template">
+				###Problem: Tooling should be resistant to random failures
 
 				With over 1M line of code and hundreds of developers:
 
 				* IDEs will be breaking 'randomly'
 				* Incremental compiler will be breaking 'randomly'
 				* Everything else will... you get it :)<br><br>
-
-				####At very least you need some way to:
-
-				* Report the problem and make reproduction easier
-				* **Fix user environment**
 			</script></section>
 
+			<section data-markdown data-background="#2F5938"><script type="text/template">
+				###Solution: Report and recover
+			</script></section>
 
 			<section data-markdown><script type="text/template">
-				###And should be smart about it
+				You need to accept sad reality:<br>
+				**something will eventually fail**
 
-				Sure, you can always recreate whole workspace.
+				In many cases failures are caused by tools outside of your control.
 
-				But users does not like to wait.
-
-				We try to fix only what is broken.
-
-				The same applies for upgrades and downgrades.
+				What you can do is report th problem and recover from error. Mostly by partial or full re-creation of the workspace.
 			</script></section>
+
+			<section data-markdown data-background="#59372F"><script type="text/template">
+				###Problem: Often tools are not enough (or are not good enough)
+			</script></section>
+
+			<section data-markdown data-background="#2F5938"><script type="text/template">
+				###Solution 1: Good practices and discipline
+
+				###Solution 2: Let's make better tools :)
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###To name just a few rules:
+
+				* If something should be private, make it private
+				* Explicitly specify type of public methods
+				* Minimize the scope of implicits
+				* Compose traits to create bigger objects and classes
+			</script></section>
+
+			<section data-markdown><script type="text/template">
+				###Most of that things should be done automaticallly
+
+				* Automatic type insertion (for public methods) - no tool can reliably do it for whole codebase
+				* Implicits scope analyse, reporting, and auto-fixing
+
+				Hopefully building that kind of tools will become easier with Scala.Meta.
+			</script></section>
+
 		</section>
+
 		<!-- ################################################################################################################ -->
 
 		<section>
