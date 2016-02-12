@@ -97,10 +97,9 @@
 				## Plan
 
 				1. Tooling at scale. Challenge bigger then it seems
-				2. Incremental. Keyword for speed and problems
-				3. Stability starts with recovery
-				4. Tooling for support: in the search of repro
-				5. Bonus. The strangest caeses we ever saw
+				2. Stability starts with recovery
+				3. Tooling for support: in the search of repro
+
 				</script>
 			</section>
 
@@ -378,102 +377,6 @@
 		</section>
 
 		<!-- ################################################################################################################ -->
-
-		<section>
-			<section data-markdown>
-				<script type="text/template">
-				## Incremental
-				#### Keyword for speed and potential problems
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				Is incremental compilation always faster?
-				</script>
-			</section>
-
-
-			<section data-markdown>
-				<script type="text/template">
-				Incremental compilation can be almost x3 slower.
-
-				<img src="imgs/sbt-fix.png" style="background: none; border: none">
-
-				https://github.com/romanowski/sbt/pull/1/files
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				## Why, oh why?
-
-				Incremental compilation is done in cycles.
-
-				Compile 5%, later 20%, later 60%, and whole project in the end will take more time than full compile.
-
-				Don't worry - this was result of mentioned problem.
-				</script>
-			</section>
-
-
-			<section data-markdown>
-				<script type="text/template">
-				_from support mailing list_
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				<div style="text-align: left;">
-					_I compiled my project, all went fine. I tried to run my app and it fails with "No class def found"_
-				</div>
-				<br>
-				<div style="text-align: right;">
-					_Did you try to clean-build (rebuild) your project?_
-				</div>
-				<br>
-				<div style="text-align: left;">
-					_Full compilation failed (correctly). Why previous compilation was successful?_
-				</div>
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				## False Positives
-				The biggest problem of incremental compilation
-
-				<img src="imgs/false-positives.png" style="background: none; border: none">
-
-				https://gist.github.com/romanowski/ae0da962a8b165e085db
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				## Bugs, bugs, bugs
-
-				The bigger your workspace is the more bugs you can face and they will hit more.
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				### Speed
-
-				We can't ask to spend ~30 minutes (this is actual number) on compilation for each change
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				### Incremental compilation is always balance between stability and speed.
-				</script>
-			</section>
-		</section>
-		<!-- ################################################################################################################ -->
-
 		<section>
 			<section data-markdown>
 				<script type="text/template">
@@ -557,9 +460,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				### Targeted recovery?
-
-				Quick and precise recovery strategy.
+				## Quick and precise recovery strategy
 				</script>
 			</section>
 
@@ -716,7 +617,7 @@
 
 				1. Deadlock detetction (from Intellij)
 				2. Tweaks in ScalaIDE (named compilation threads)
-				3. API Changes from SBT's name hashing
+				3. API Changes from SBT's compiler
 
 				</script>
 			</section>
@@ -726,7 +627,7 @@
 				## Beware!
 				It can break your tooling
 
-				1. Problems with namehashing api changes
+				1. Problems with SBT's api changes
 				2. Deadlock detection that breaks long compilations
 				3. Time losses on tracking
 
@@ -737,6 +638,11 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
+			<section data-markdown>
+				<script type="text/template">
+				</script>
+			</section>
+
 			<section data-markdown>
 				<script type="text/template">
 				Radnom points.
@@ -775,24 +681,106 @@
 		</section>
 		<!-- ################################################################################################################ -->
 
-
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				Podsumowanie 1
 				</script>
-
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Podsumowanie 2
+				## Incremental
+				#### Keyword for speed and potential problems
 				</script>
-
 			</section>
 
+			<section data-markdown>
+				<script type="text/template">
+				Is incremental compilation always faster?
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				Incremental compilation can be almost x3 slower.
+
+				<img src="imgs/sbt-fix.png" style="background: none; border: none">
+
+				https://github.com/romanowski/sbt/pull/1/files
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Why, oh why?
+
+				Incremental compilation is done in cycles.
+
+				Compile 5%, later 20%, later 60%, and whole project in the end will take more time than full compile.
+
+				Don't worry - this was result of mentioned problem.
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+				_from support mailing list_
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				<div style="text-align: left;">
+					_I compiled my project, all went fine. I tried to run my app and it fails with "No class def found"_
+				</div>
+				<br>
+				<div style="text-align: right;">
+					_Did you try to clean-build (rebuild) your project?_
+				</div>
+				<br>
+				<div style="text-align: left;">
+					_Full compilation failed (correctly). Why previous compilation was successful?_
+				</div>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## False Positives
+				The biggest problem of incremental compilation
+
+				<img src="imgs/false-positives.png" style="background: none; border: none">
+
+				https://gist.github.com/romanowski/ae0da962a8b165e085db
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Bugs, bugs, bugs
+
+				The bigger your workspace is the more bugs you can face and they will hit more.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				### Speed
+
+				We can't ask to spend ~30 minutes (this is actual number) on compilation for each change
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				### Incremental compilation is always balance between stability and speed.
+				</script>
+			</section>
 		</section>
 		<!-- ################################################################################################################ -->
+
 
 		<section>
 
