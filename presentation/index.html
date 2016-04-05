@@ -140,14 +140,15 @@
 			</section>
 			<section data-markdown>
 				<script type="text/template">
-
 				Algorithm:
 
+				```
 				do
-				1. Detect changes
-				2. Select affected subset of sources
-				3. Compile
+					Detect changes
+					Select affected subset of sources
+					Compile affected sources
 				while there are changes to process
+				```
 
 				Simple?
 				</script>
@@ -157,7 +158,18 @@
 				<script type="text/template">
 				Do we need recursion?
 
-				//Example
+				```scala
+				// Team.scala
+				class Team {
+					def room = "1" // change to 1
+				}
+
+				// User.scala
+				class User(team: Team) {
+					val room: String = team.room // this must fail
+				}
+				```
+
 				</script>
 			</section>
 
@@ -165,13 +177,31 @@
 				<script type="text/template">
 				Can incremental compilation be *slower* then full build?
 
-				//Example
+				```scala
+				object A { def a1 = 1 } // A.scala
+
+				object B { def b1 = A.a1 } // B.scala
+
+				object C { def c1 = B.b1 } // C.scala
+
+				object D { def d1 = C.c1 } // D.scala
+
+				```
+
+				```
+				[info] Compiling 1 Scala source
+				[info] Compiling 2 Scala source
+				[info] Compiling 2 Scala source
+				[info] Compiling 4 Scala source
+				```
+
+				Why 4 in the end?
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				I have never saw it on production code (without bug in compiler itself).
+				I have never seen such slowdown on production code (without bug in compiler itself).
 				</script>
 			</section>
 		</section>

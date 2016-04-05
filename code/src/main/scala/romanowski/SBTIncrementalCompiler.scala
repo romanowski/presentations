@@ -3,8 +3,6 @@ package romanowski
 import java.io.File
 
 
-
-
 object SBTIncrementalCompiler {
 
   case class Compilation(allSources: Seq[File], output: File, options: Seq[String])
