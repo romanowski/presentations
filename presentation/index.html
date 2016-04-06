@@ -86,7 +86,8 @@
 				2. Incremental compiler: do it yourself
 				3. What was changed?
 				4. What is affected?
-				5. In the scope of name
+				5. Sbt Incremental compiler
+				5. Sbt Incremental compiler (with name hashing)
 				6. Can we do better?
 
 				</script>
@@ -114,7 +115,7 @@
 				</script>
 			</section>
 
-			<section data-markdown>
+		<!--	<section data-markdown>
 				<script type="text/template">
 				Let's compile more
 				</script>
@@ -124,7 +125,7 @@
 				<script type="text/template">
 				Usages graphs... TODO
 				</script>
-			</section>
+			</section>-->
 
 		</section>
 		<!-- ################################################################################################################ -->
@@ -234,7 +235,27 @@
 				<script type="text/template">
 				## signatures from .class files?
 
-				//TODO example
+				```scala
+				trait Dep
+
+				class Generic[E[V] <: Seq[V with Dep]]
+
+				// yields same javap output as
+
+				class Generic[E[V] <: Seq[V]]
+                ```
+
+				```
+				public class romanowski.changes.Generic
+					<E extends scala.collection.Seq<java.lang.Object>> {
+					public romanowski.changes.Generic();
+
+					Code:
+					0: aload_0
+					1: invokespecial #13  // Method java/lang/Object."<init>":()V
+					4: return
+				}
+				```
 				</script>
 			</section>
 
@@ -242,15 +263,17 @@
 				<script type="text/template">
 				## scalap?
 
-				//TODO example
+				<!-- TODO example-->
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				## scala reflect?
+				## scala compiler plugin?
 
-				//TODO compiler plugin
+				Create new phase and traverse and hash all non-private member using trees and symbols from compiler.
+
+				#### What can go wrong here?
 				</script>
 			</section>
 
@@ -258,7 +281,7 @@
 				<script type="text/template">
 			```
 			do
-				// Done - detect changed hashes of source or non-private apo
+				// Done - detect changed hashes of source or non-private api
 				Detect changes
 				// TODO
 				Select affected subset of sources
@@ -288,16 +311,51 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Example file TODO
+				```scala
+				// Implicits.scala
+				class Implicits(i: Int) {
+					implicit class FooBarOps(from: FooImpl[_]){
+						def fooBar = 1
+					}
+				}
+
+				// FooImpl.scala
+				class FooImpl[A] extends Foo[A]
+
+				// Baz.scala
+				class Baz {
+				val foo = new FooImpl[Bar]
+
+				foo.fooBar
+				}
+
+
+				```
 				</script>
 			</section>
 
+			<section data-markdown>
+				<script type="text/template">
+				```scala
+				// Foo.scala
+				class Foo[A]
+
+				object Foo // extends Implicits(1) // Uncomment this
+
+
+				// Bar.scala
+				class Bar
+
+				object Bar extends Implicits(1)
+				```
+				</script>
+			</section>
 
 			<section data-markdown>
 				<script type="text/template">
 				## *.class files?
 
-				//TODO example
+				There is no direct path that leads from changes in Foo$ (companion object from Foo) to Baz.
 				</script>
 			</section>
 
@@ -305,7 +363,7 @@
 				<script type="text/template">
 				## scalap?
 
-				//TODO example
+				There is no direct path that leads from changes in Foo$ (companion object from Foo) to Baz.
 				</script>
 			</section>
 
@@ -313,7 +371,7 @@
 				<script type="text/template">
 				## Concerete usages vs. potential usage
 
-				//TODO examples
+				Do we want to reimplement compiler?
 				</script>
 			</section>
 
@@ -321,7 +379,7 @@
 				<script type="text/template">
 				## Scala reflect - FTW?
 
-				//TODO example
+				Instead of reimplementing we cal actually call compiler.
 				</script>
 			</section>
 
@@ -329,11 +387,11 @@
 				<script type="text/template">
 				```
 				do
-					// Done - detect changed hashes of source or non-private apo
+					// Done: detect changed hashes of source or non-private apo
 					Detect changes
-					// Done - Traverse tree and add all sources for all used symbols
+					// Done: Traverse tree and add all sources for all used symbols
 					Select affected subset of sources
-					// Done - scalac.compile(sources)
+					// Done: scalac.compile(sources)
 					Compile affected sources
 				while there are changes to process
 				```
@@ -351,23 +409,161 @@
 				<script type="text/template">
 				# SBT - basic approach
 
-				//pseudo code for compile
+				explained in scala code
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
+				```scala
+				case class API(source: File, hash: Hash)
 
-				//pseudo code for changed sources
+				def compile(compilation: Compilation): Unit ={
+					var changed = changedSources(compilation)
+
+					while(changed.nonEmpty){
+						val oldAPIs = changed.map(currentAPI)
+						val newAPIs = doCompile(changed)
+
+						val changedAPIs = diff(oldAPIs, newAPIs)
+
+						changed = changedAPIs.flatMap(allDependecies)
+					}
+				}
+				```
 
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
+				```scala
+				case class Compilation(allSources: Seq[File],
+					output: File, options: Seq[String])
 
-				//pseudo code for changed sources
+				def changedSources(compilation: Compilation): Seq[File] = {
+					def outputChanged =
+						compilation.output != previousCompilation.output
+					def optionsChanged =
+						compilation.output != previousCompilation.output
 
+					if(outputChanged || optionsChanged) // Then compile all
+						compilation.allSources
+					else // Compile only changed files
+						compilation.allSources.filter(changedSource)
+				}
+				```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				```scala
+				case class Compilation(allSources: Seq[File],
+				output: File, options: Seq[String])
+
+				def changedSources(compilation: Compilation): Seq[File] = {
+				def outputChanged =
+				compilation.output != previousCompilation.output
+				def optionsChanged =
+				compilation.output != previousCompilation.output
+
+				if(outputChanged || optionsChanged) // Then compile all
+				compilation.allSources
+				else // Compile only changed files
+				compilation.allSources.filter(changedSource)
+				}
+				```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				```scala
+				private def doCompile(source: Seq[File]): Seq[API] = {
+					val listener = new SourceListener
+
+					runScalac(listener)
+
+					updateDependecies(listener.dependencies)
+
+					listener.apis
+				}
+				```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				```scala
+				class SourceListener{
+					def process(unit: CompilationUnit): Unit = {
+						// Compute hashes
+						val unitTraverser = new HashingTraverser.run(unit.tree)
+
+						_apis +=  API(unit.source, unitTraverser.unitHash)
+
+						// Compute dependencies
+						val depsTraverser = new DepsTraverser.run(unit.tree)
+
+						_dependencies += (unit.source -> depsTraverser.dependecies)
+					}
+				}
+				```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				```scala
+				trait TreeTraverser {
+					def traverse(tree: Tree): Unit
+
+					def run(tree: Tree): this.type
+				}
+				```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				```scala
+				class HashingTraverser extends TreeTraverser {
+					var unitHash = EmptyHash
+
+					override def traverse(tree: Tree): Unit = tree match {
+						case ClassTree(signature, members) =>
+							unitHash.hash(signature)
+							members.foreach(traverse)
+						case  Method(signature, body) =>
+							unitHash.hash(signature)
+							traverse(body)
+						//  ...
+					}
+				}
+				```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				```scala
+				class DepsTraverser extends TreeTraverser {
+					var dependecies: Set[File] = Set.empty
+
+					override def traverse(tree: Tree): Unit = tree match {
+						case ClassTree(signature, members) =>
+							dependecies += signature.declaredIn
+							members.foreach(traverse)
+						case  Method(signature, body) =>
+							dependecies += signature.declaredIn
+							traverse(body)
+						case Operation(tpe, _) =>
+							dependecies += tpe.declaredIn
+						// ...
+					}
+				}
+				```
 				</script>
 			</section>
 
@@ -380,22 +576,33 @@
 				<script type="text/template">
 				# SBT - name hashing
 
-				//pseudo code for compile
+				Explained as diff on scala code
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				```scala
+				case class API(source: File, hash: Hash)
+
+				// becomes
+
+				case class NamedAPI(source: File, hashes: Map[String,Hash])
+				```
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
 
-				//changes in API handling
+				```scala
+				var dependecies: Set[File] = Set.empty
 
-				</script>
-			</section>
+				becomes
 
-			<section data-markdown>
-				<script type="text/template">
-
-				//changes in dependecies handling
+				var fileDependencies: Set[File] = Set.empty
+				var nameDependencies: Set[String] = Set.empty
+				```
 
 				</script>
 			</section>
@@ -421,8 +628,6 @@
 			<section data-markdown>
 				<script type="text/template">
 				# Speed vs. Precision
-
-				//TODO examples
 				</script>
 			</section>
 
