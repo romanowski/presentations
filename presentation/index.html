@@ -144,9 +144,9 @@
 
 				```
 				do
-					Detect changes
-					Select affected subset of sources
-					Compile affected sources
+					Detect changes //TODO
+					Select affected subset of sources //TODO
+					Compile affected sources // scalac.compile(sources) - DONE
 				while there are changes to process
 				```
 
@@ -190,12 +190,12 @@
 
 				```
 				[info] Compiling 1 Scala source
-				[info] Compiling 2 Scala source
-				[info] Compiling 2 Scala source
-				[info] Compiling 4 Scala source
+				[info] Compiling 2 Scala sources
+				[info] Compiling 2 Scala sources
+				[info] Compiling 4 Scala sources
 				```
 
-				Why 4 in the end?
+				Why do we compiler 4 sources in the end?
 				</script>
 			</section>
 
@@ -256,6 +256,22 @@
 
 			<section data-markdown>
 				<script type="text/template">
+			```
+			do
+				// Done - detect changed hashes of source or non-private apo
+				Detect changes
+				// TODO
+				Select affected subset of sources
+				// Done - scalac.compile(sources)
+				Compile affected sources
+			while there are changes to process
+			```
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
 				## any other ideas?
 				</script>
 			</section>
@@ -308,6 +324,22 @@
 				//TODO example
 				</script>
 			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				```
+				do
+					// Done - detect changed hashes of source or non-private apo
+					Detect changes
+					// Done - Traverse tree and add all sources for all used symbols
+					Select affected subset of sources
+					// Done - scalac.compile(sources)
+					Compile affected sources
+				while there are changes to process
+				```
+				</script>
+			</section>
+
 
 		</section>
 
