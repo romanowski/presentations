@@ -85,10 +85,17 @@
 				1. Our problem, sbt 1.0 and more fun.
 				2. My app (copmpilation) struck - what can I do?
 				3. Bigger gun. Yourkit.
-				3. Profling scala applicaiton - finding a hot spot.
-				4. Collections. Asking for a slow applications.
-				5. Dirty hacks: going parallel
+				3. Profiling scala application - finding a hot spot.
+				4. Bad Types. Asking for a slow applications.
 
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Scala sphere ticket!
+
+				Find a song based lyrics from slides
 				</script>
 			</section>
 
@@ -104,12 +111,18 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				> Hello shapeless, my old friend,
-				> I've come to compile you again.
+				Nothing fancy.
+
+				Shapless stripped of most plugins to use SBT 1.0.
 
 				https://github.com/romanowski/shapeless/tree/profiling/problem
 
-				Nothing fancy. Shapless stripped of most plugins to use SBT 1.0.
+				<br>
+				> Hello shapeless, my old friend,<br>
+				> I've come to compile you again.
+
+
+
 				</script>
 			</section>
 
@@ -124,8 +137,11 @@
 				## SBT 1.0, yes but why?
 
 				1. Server!
-				2. sth else
-				3. Better incremental compilation.
+				2. NIO
+				3. Zinc (better incremental compilation)
+				4. More:
+					* http://eed3si9n.com/sbt-1-roadmap
+					* https://github.com/sbt/sbt/projects/1
 				</script>
 			</section>
 
@@ -184,16 +200,57 @@
 				<script type="text/template">
 				## Demo time.
 
-				Thread dumps, compiler
+				Thread dumps, sampling
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Demo time.
+
+					Debbugger FTW!
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Debbugger FTW!
+
+					//TODO change
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
 				## github.com/sbt/zinc/pull/193
-<br>
+<br> //TODO add pionters to Wieslaw!
 				## Are we done now?
 
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### How much overhead is introduced?
+					<br>
+					On full compilation using zinc (from sbt 1.0).
+
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Demo time!
+
+				jvisualvm (again)
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				<img src="imgs/slow-zinc.png"/>
+
+				~9,7 % (I've seen cases over 20%)
 				</script>
 			</section>
 		</section>
@@ -209,7 +266,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				How much overhead zinc (incremental compiler) introduce?
+				### How much overhead is introduced? #2
 
 				Demo time!
 				</script>
@@ -217,437 +274,107 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				## How to detect API changes?
+				## Profiling options
+
+				<img src="imgs/profiling-options.png"/>
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				## signatures from .class files?
+					More in Dmitry Petrashko Scala xChange talk:
 
-				```scala
-				trait Dep
+					<img src="imgs/dp.png"/>
 
-				class Generic[E[V] <: Seq[V with Dep]]
-
-				// yields same javap output as
-
-				class Generic[E[V] <: Seq[V]]
-                ```
-
-				```
-				public class romanowski.changes.Generic
-					<E extends scala.collection.Seq<java.lang.Object>> {
-					public romanowski.changes.Generic();
-
-					Code:
-					0: aload_0
-					1: invokespecial #13  // Method java/lang/Object."<init>":()V
-					4: return
-				}
-				```
+					https://skillsmatter.com/skillscasts/8968-what-should-every-programmer-know-about-hardware-intermediate
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				## scalap?
+					### How much overhead is introduced? #3
 
+					Demo time!
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				## Ok, I can't find anything
 				<!-- TODO example-->
 				</script>
 			</section>
 
-			<section data-markdown>
-				<script type="text/template">
-				## scala compiler plugin?
 
-				Create new phase and traverse and hash all non-private member using trees and symbols from compiler.
-
-				#### What can go wrong here?
-				</script>
 			</section>
+			<section>
 
 			<section data-markdown>
 				<script type="text/template">
-			```
-			do
-				// Done - detect changed hashes of source or non-private api
-				Detect changes
-				// TODO
-				Select affected subset of sources
-				// Done - scalac.compile(sources)
-				Compile affected sources
-			while there are changes to process
-			```
+				## Where is my hotspot?
 				</script>
 			</section>
 
 
 			<section data-markdown>
 				<script type="text/template">
-				## any other ideas?
+				## Narrow down scope!
+
+				Demo time!
 				</script>
 			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				TODO
+
+				Merge callees, Focus on, merge callees, backtraces, bingo!
+				</script>
+			</section>
+
 		</section>
 
 		<!-- ################################################################################################################ -->
 
-		<section>
-			<section data-markdown>
-				<script type="text/template">
-				# What is affected?
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				// Implicits.scala
-				class Implicits(i: Int) {
-					implicit class FooBarOps(from: FooImpl[_]){
-						def fooBar = 1
-					}
-				}
-
-				// FooImpl.scala
-				class FooImpl[A] extends Foo[A]
-
-				// Baz.scala
-				class Baz {
-				val foo = new FooImpl[Bar]
-
-				foo.fooBar
-				}
-
-
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				// Foo.scala
-				class Foo[A]
-
-				object Foo // extends Implicits(1) // Uncomment this
-
-
-				// Bar.scala
-				class Bar
-
-				object Bar extends Implicits(1)
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				## *.class files?
-
-				There is no direct path that leads from changes in Foo$ (companion object from Foo) to Baz.
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				## scalap?
-
-				There is no direct path that leads from changes in Foo$ (companion object from Foo) to Baz.
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				## Concerete usages vs. potential usage
-
-				Do we want to reimplement compiler?
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				## Scala reflect - FTW?
-
-				Instead of reimplementing we cal actually call compiler.
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```
-				do
-					// Done: detect changed hashes of source or non-private apo
-					Detect changes
-					// Done: Traverse tree and add all sources for all used symbols
-					Select affected subset of sources
-					// Done: scalac.compile(sources)
-					Compile affected sources
-				while there are changes to process
-				```
-				</script>
-			</section>
-
-
-		</section>
-
-		<!-- ################################################################################################################ -->
 
 		<section>
 
 			<section data-markdown>
 				<script type="text/template">
-				# SBT - basic approach
+					## Bad Types.
+					### Asking for a slow applications.
 
-				explained in scala code
+					<br>
+					> You do not know, heap like a cancer grows
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				```scala
-				case class API(source: File, hash: Hash)
-
-				def compile(compilation: Compilation): Unit ={
-					var changed = changedSources(compilation)
-
-					while(changed.nonEmpty){
-						val oldAPIs = changed.map(currentAPI)
-						val newAPIs = doCompile(changed)
-
-						val changedAPIs = diff(oldAPIs, newAPIs)
-
-						changed = changedAPIs.flatMap(allDependecies)
-					}
-				}
-				```
-
+					Demo time!
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				```scala
-				case class Compilation(allSources: Seq[File],
-					output: File, options: Seq[String])
-
-				def changedSources(compilation: Compilation): Seq[File] = {
-					def outputChanged =
-						compilation.output != previousCompilation.output
-					def optionsChanged =
-						compilation.output != previousCompilation.output
-
-					if(outputChanged || optionsChanged) // Then compile all
-						compilation.allSources
-					else // Compile only changed files
-						compilation.allSources.filter(changedSource)
-				}
-				```
+				TODO pics for checking collections
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				```scala
-				case class Compilation(allSources: Seq[File],
-				output: File, options: Seq[String])
+				> People typing without thinking
 
-				def changedSources(compilation: Compilation): Seq[File] = {
-				def outputChanged =
-				compilation.output != previousCompilation.output
-				def optionsChanged =
-				compilation.output != previousCompilation.output
-
-				if(outputChanged || optionsChanged) // Then compile all
-				compilation.allSources
-				else // Compile only changed files
-				compilation.allSources.filter(changedSource)
-				}
-				```
+				// TODO show
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				```scala
-				private def doCompile(source: Seq[File]): Seq[API] = {
-					val listener = new SourceListener
-
-					runScalac(listener)
-
-					updateDependecies(listener.dependencies)
-
-					listener.apis
-				}
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				class SourceListener{
-					def process(unit: CompilationUnit): Unit = {
-						// Compute hashes
-						val unitTraverser = new HashingTraverser.run(unit.tree)
-
-						_apis +=  API(unit.source, unitTraverser.unitHash)
-
-						// Compute dependencies
-						val depsTraverser = new DepsTraverser.run(unit.tree)
-
-						_dependencies += (unit.source -> depsTraverser.dependecies)
-					}
-				}
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				trait TreeTraverser {
-					def traverse(tree: Tree): Unit
-
-					def run(tree: Tree): this.type
-				}
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				class HashingTraverser extends TreeTraverser {
-					var unitHash = EmptyHash
-
-					override def traverse(tree: Tree): Unit = tree match {
-						case ClassTree(signature, members) =>
-							unitHash.hash(signature)
-							members.foreach(traverse)
-						case  Method(signature, body) =>
-							unitHash.hash(signature)
-							traverse(body)
-						//  ...
-					}
-				}
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				class DepsTraverser extends TreeTraverser {
-					var dependecies: Set[File] = Set.empty
-
-					override def traverse(tree: Tree): Unit = tree match {
-						case ClassTree(signature, members) =>
-							dependecies += signature.declaredIn
-							members.foreach(traverse)
-						case  Method(signature, body) =>
-							dependecies += signature.declaredIn
-							traverse(body)
-						case Operation(tpe, _) =>
-							dependecies += tpe.declaredIn
-						// ...
-					}
-				}
-				```
-				</script>
-			</section>
-
-		</section>
-
-		<!-- ################################################################################################################ -->
-
-		<section>
-			<section data-markdown>
-				<script type="text/template">
-				# SBT - name hashing
-
-				Explained as diff on scala code
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				```scala
-				case class API(source: File, hash: Hash)
-
-				// becomes
-
-				case class NamedAPI(source: File, hashes: Map[String,Hash])
-				```
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-
-				```scala
-				var dependecies: Set[File] = Set.empty
-
-				becomes
-
-				var fileDependencies: Set[File] = Set.empty
-				var nameDependencies: Set[String] = Set.empty
-				```
-
-				</script>
-			</section>
-
-		</section>
-		<!-- ################################################################################################################ -->
-
-		<section>
-			<section data-markdown>
-				<script type="text/template">
-				# Can we do better?
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				# Smaller granulation
-
-				https://github.com/sbt/zinc/pull/86
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				# Speed vs. Precision
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				# Speed-up your incremental compilation in 3 steps
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				# Provide return types
-				</script>
-			</section>
-
-
-			<section data-markdown>
-				<script type="text/template">
-				# One file - few classes
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-				# Les wildcard imports
+				> premature optimization is the root of all evil
 				</script>
 			</section>
 		</section>
-
-		<!-- ################################################################################################################ -->
 
 		<section>
 
@@ -699,17 +426,6 @@
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
 </body>

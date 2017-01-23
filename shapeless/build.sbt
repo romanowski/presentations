@@ -22,7 +22,8 @@ lazy val commonSettings = Seq(
 
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
-    Resolver.sonatypeRepo("snapshots")
+    Resolver.sonatypeRepo("snapshots"),
+    Resolver.file("local-builds", baseDirectory.value / ".." / "repo")
   ),
 
   scalacOptions in console in Compile -= "-Xfatal-warnings",
