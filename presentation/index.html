@@ -71,9 +71,9 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## Incremental Compiler:
+				<div id="#"></div> Let’s speed up our compilation.
 
-				### taming Scalac
+				## Live profiling of zinc application.
 				</script>
 
 			</section>
@@ -82,13 +82,12 @@
 				<script type="text/template">
 				## Plan
 
-				1. Incremental compiler: why?
-				2. Incremental compiler: do it yourself
-				3. What was changed?
-				4. What is affected?
-				5. Sbt Incremental compiler
-				5. Sbt Incremental compiler (with name hashing)
-				6. Can we do better?
+				1. Our problem, sbt 1.0 and more fun.
+				2. My app (copmpilation) struck - what can I do?
+				3. Bigger gun. Yourkit.
+				3. Profling scala applicaiton - finding a hot spot.
+				4. Collections. Asking for a slow applications.
+				5. Dirty hacks: going parallel
 
 				</script>
 			</section>
@@ -98,111 +97,103 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## Incremental compiler, why?
+				## Our problem, sbt 1.0 and more fun.
 				</script>
 			</section>
 
 
 			<section data-markdown>
 				<script type="text/template">
-				cos Scala compilation is
+				> Hello shapeless, my old friend,
+				> I've come to compile you again.
 
-				# SLOOOW*
+				https://github.com/romanowski/shapeless/tree/profiling/problem
 
-				*compared to java
-
-				more advanced static typed languages (e.g. C#, ... ) are also slow
-				</script>
-			</section>
-
-		<!--	<section data-markdown>
-				<script type="text/template">
-				Let's compile more
+				Nothing fancy. Shapless stripped of most plugins to use SBT 1.0.
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Usages graphs... TODO
+					## Background demo time!
 				</script>
-			</section>-->
+			</section>
 
+			<section data-markdown>
+				<script type="text/template">
+				## SBT 1.0, yes but why?
+
+				1. Server!
+				2. sth else
+				3. Better incremental compilation.
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+				# Demo time!
+				</script>
+			</section>
 		</section>
+
+
 		<!-- ################################################################################################################ -->
 
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## Incremental compiler:
-
-				# do it yourself
+				## My app (compilation) struck
+				## what can I do?
 				</script>
 
 			</section>
 			<section data-markdown>
 				<script type="text/template">
-				Algorithm:
+				### Analyze chaged code
 
 				```
-				do
-					Detect changes //TODO
-					Select affected subset of sources //TODO
-					Compile affected sources // scalac.compile(sources) - DONE
-				while there are changes to process
-				```
+				sbt (1.0.x) > git diff 0.13 | tail
+				util/process/NOTICE                                |    3 -
+				util/process/src/main/scala/sbt/InheritInput.scala |   21 -
+				util/process/src/main/scala/sbt/Process.scala      |  221 ----
+				util/process/src/main/scala/sbt/ProcessImpl.scala  |  436 --------
+				util/process/src/main/scala/sbt/SyncVar.scala      |   39 -
+				.../src/test/scala/ProcessSpecification.scala      |  131 ---
+				util/process/src/test/scala/TestedProcess.scala    |   46 -
+				util/relation/src/main/scala/sbt/Relation.scala    |  172 ----
+				util/relation/src/test/scala/RelationTest.scala    |   84 --
+				1246 files changed, 18738 insertions(+), 56616 deletions(-)
 
-				Simple?
+				```
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Do we need recursion?
+				## jvisualvm
 
-				```scala
-				// Team.scala
-				class Team {
-					def room = "1" // change to 1
-				}
+				All-in-One Java Troubleshooting Tool.
 
-				// User.scala
-				class User(team: Team) {
-					val room: String = team.room // this must fail
-				}
-				```
+				Free.
 
+				Preinstalled in oracle jdk.
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Can incremental compilation be *slower* then full build?
+				## Demo time.
 
-				```scala
-				object A { def a1 = 1 } // A.scala
-
-				object B { def b1 = A.a1 } // B.scala
-
-				object C { def c1 = B.b1 } // C.scala
-
-				object D { def d1 = C.c1 } // D.scala
-
-				```
-
-				```
-				[info] Compiling 1 Scala source
-				[info] Compiling 2 Scala sources
-				[info] Compiling 2 Scala sources
-				[info] Compiling 4 Scala sources
-				```
-
-				Why do we compiler 4 sources in the end?
+				Thread dumps, compiler
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				I have never seen such slowdown on production code (without bug in compiler itself).
+				## github.com/sbt/zinc/pull/193
+<br>
+				## Are we done now?
+
 				</script>
 			</section>
 		</section>
@@ -212,16 +203,15 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## What was changed?
+				# Bigger gun. Yourkit.
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				Class (file) is changed when
+				How much overhead zinc (incremental compiler) introduce?
 
-				1. It's source file changed
-				2. It's not-private API changed
+				Demo time!
 				</script>
 			</section>
 
