@@ -12,7 +12,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
 	<meta name="viewport"
-	      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
 	<style type="text/css">
 		.lefty {
@@ -71,7 +71,7 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## DRY Compiling!
+				# DRY Compiling!
 				</script>
 
 			</section>
@@ -80,7 +80,11 @@
 				<script type="text/template">
 				## Plan
 
-				1. ...
+				1. Quick look at slow compiler
+				3. Meet Hoarder
+				2. Incremental compilation and caching
+				4. Use Hoarder
+				5. Plans for future
 
 				</script>
 			</section>
@@ -88,6 +92,108 @@
 		</section>
 
 		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					## Quick look at slow compiler
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### My incremental build usually take
+
+					|  | | |
+					| -- | -- | -- |
+					| ~10&nbsp;sec | wait, not&nbsp;a&nbsp;problem | most Java |
+					| ~minute |  wait, but&nbsp;rather&nbsp;not | most Scala |
+					| ~5&nbsp;minutes | reply on mail, talk&nbsp;on&nbsp;slack | |
+					| ~15&nbsp;minutes | go for coffee, do&nbsp;a&nbsp;review | |
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					TODO: built times - incremental
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## My full build usually take
+
+					|  | | |
+					| -- | -- | -- |
+					| ~10&nbsp;sec | wait, not&nbsp;a&nbsp;problem | |
+					| ~minute |  wait, but&nbsp;rather&nbsp;not | most Java |
+					| ~5&nbsp;minutes | reply on mail, talk&nbsp;on&nbsp;slack | most Scala |
+					| ~15&nbsp;minutes | go for coffee, do&nbsp;a&nbsp;review | |
+
+					(there are Scala projects that compile ~hour)
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					TODO: built times - full
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					Demo time!
+
+					<img src="imgs/long-compilation.jpg" alt="Stupid meme"/>
+				</script>
+			</section>
+
+		</section>
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					# Meet Hoarder
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					Sbt plugin around 'cached compiation' idea.
+
+					romanowski.github.io/hoarder
+				</script>
+			</section>
+
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					## DRY Compiling!
+				</script>
+
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Plan
+
+					1. Quick look at slow compiler
+					3. Meet Hoarder
+					2. Incremental compilation and caching
+					4. Use Hoarder
+					5. Plans for future
+
+				</script>
+			</section>
+
+		</section>
+		<!-- ################################################################################################################ -->
+
 
 		<section>
 
