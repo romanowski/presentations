@@ -73,31 +73,23 @@
 				<script type="text/template">
 				# DRY Compiling!
 				</script>
-
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				## Plan
+					#### Scala Days Copenhagen: Discount to win!
 
-				1. Quick look at slow compiler
-				3. Meet Hoarder
-				2. Incremental compilation and caching
-				4. Use Hoarder
-				5. Plans for future
+					<br>
 
-				</script>
-			</section>
+					I am looking for Scala projects I can test my plugin on (to improve compilation times in general).
 
-			<section data-markdown>
-				<script type="text/template">
-					### Discount for Scala Days Copenhagen to win
+					<br>
 
-					Send me link project where you want to speed up compilation:
+					Send me a link to one
 
-					* gitter
+					* gitter @romanowski
 					* tweet with #sbthorder hashtag
-					* or any other way
+					* any other way
 				</script>
 			</section>
 
@@ -114,14 +106,46 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					### My incremental build usually take
+					### My build usually take
 
-					|  | | |
+					|  | |
+					| -- | -- |
+					| ~10&nbsp;sec | wait, not&nbsp;a&nbsp;problem |
+					| ~minute |  wait, but&nbsp;rather&nbsp;not |
+					| ~5&nbsp;minutes | reply to an mail, talk&nbsp;on&nbsp;slack |
+					| ~15&nbsp;minutes | go for coffee, do&nbsp;a&nbsp;review |
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					| project | 'cold' | 'warm'
 					| -- | -- | -- |
-					| ~10&nbsp;sec | wait, not&nbsp;a&nbsp;problem | most Java |
-					| ~minute |  wait, but&nbsp;rather&nbsp;not | most Scala |
-					| ~5&nbsp;minutes | reply on mail, talk&nbsp;on&nbsp;slack | |
-					| ~15&nbsp;minutes | go for coffee, do&nbsp;a&nbsp;review | |
+					| ensime-server | 21s | 12s
+					| scala-debugger | 30s | 24s |
+					| akka | 19s | 11s |
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Most of this builds is
+					#incremental
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## My full build usually take
+
+					|  | |
+					| -- | -- |
+					| ~10&nbsp;sec | wait, not&nbsp;a&nbsp;problem |
+					| ~minute |  wait, but&nbsp;rather&nbsp;not |
+					| ~5&nbsp;minutes | reply on mail, talk&nbsp;on&nbsp;slack |
+					| ~15&nbsp;minutes | go for coffee, do&nbsp;a&nbsp;review |
+
+					(there are Scala projects that compile ~hour)
 				</script>
 			</section>
 
@@ -135,55 +159,16 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					TODO Virtus pic!
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					TODO: built times - incremental
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					### My incremental build usually take
-
-					|  | | |
+					| project | time |
 					| -- | -- | -- |
-					| ~10&nbsp;sec | wait, not&nbsp;a&nbsp;problem | most Java |
-					| ~minute |  wait, but&nbsp;rather&nbsp;not | most Scala |
-					| ~5&nbsp;minutes | reply on mail, talk&nbsp;on&nbsp;slack | |
-					| ~15&nbsp;minutes | go for coffee, do&nbsp;a&nbsp;review | |
+					| ensime-server | 161s |
+					| scala-debugger | 294s |
+					| akka | 316s |
 				</script>
 			</section>
-
 			<section data-markdown>
 				<script type="text/template">
-					## My full build usually take
-
-					|  | | |
-					| -- | -- | -- |
-					| ~10&nbsp;sec | wait, not&nbsp;a&nbsp;problem | |
-					| ~minute |  wait, but&nbsp;rather&nbsp;not | most Java |
-					| ~5&nbsp;minutes | reply on mail, talk&nbsp;on&nbsp;slack | most Scala |
-					| ~15&nbsp;minutes | go for coffee, do&nbsp;a&nbsp;review | |
-
-					(there are Scala projects that compile ~hour)
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					TODO: built times - full
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					Demo time!
-
-					<img src="imgs/long-compilation.jpg" alt="Stupid meme"/>
+					Can we do better?
 				</script>
 			</section>
 
@@ -213,26 +198,34 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					### 'cached compilation' Explained
+					### 'cached compilation' =
+					### *cache + incremental compilation*
+				</script>
+			</section>
 
-					``` scala
-					def cacheCompile(cache: CacheRef) = {
-						loadCache(cache)
-						compile()
-					}
+			<section data-markdown>
+				<script type="text/template">
+				### 'cached compilation' Explained
 
-					def cacheCompileExplained(cache: CacheRef) = {
-						// This is not how this is done
-						val currentRef = currentSourceReference()
-						checkout(cache.sourceReference)
-						compile() // Most expensive part
-						checkout(currentRef)
+				``` scala
+				def cacheCompile(cache: CacheRef) = {
+					loadCache(cache)
+					compile()
+				}
 
-						compile(project)
-					}
+				def cacheCompileExplained(cache: CacheRef) = {
+					// This is not how this is done
+					val currentRef = currentSourceReference()
+					checkout(cache.sourceReference)
+					compile() // Most expensive part
+					checkout(currentRef)
+
+					compile(project)
+				}
 					```
 				</script>
 			</section>
+
 
 			<section data-markdown>
 				<script type="text/template">
@@ -244,29 +237,18 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Caching per commit is ideal but it is quite expensive.
-
-
-				```
-
-				 Cache <- C1 <- C2  <- C3 <- C4 <- Cache <- C4 <- C5
-
-
-				```
-
-				But we can do it smarter!
+					Cache1 <- C1 <- C2  <- C3 <- C4 <- Cache2 <- C5 <- C6
 				</script>
 			</section>
 
-
 			<section data-markdown>
 				<script type="text/template">
-					### 'cached compilation' Explained
+					### Loading my cache
 
 					``` scala
-					case class CacheRef(binaries: Path, metadata: Path, sourceRef: Hash)
+					case class CacheRef(binaries: Path, metadata: Path, srcRef: Hash)
 
-					def loadCache(cache: CacheRef){
+					def loadCache(cache: CacheRef) {
 						// Clean classfiles, extract new ones
 						loadBinaries(cache.binaries)
 
@@ -405,9 +387,22 @@
 
 			<section data-markdown>
 				<script type="text/template">
-				Demo time!
+				```scala
+				trait AnalysisMappers {
+					val outputDirMapper: Mapper[File] = Mapper.forFile
+					val sourceDirMapper: Mapper[File] = Mapper.forFile
+					val scalacOptions: Mapper[String] = Mapper.forString
 
-				<img src="imgs/brace.jpg"/>
+					val sourceMapper: Mapper[File] = Mapper.forFile
+					val productMapper: Mapper[File] = Mapper.forFile
+					val binaryMapper: Mapper[File] = Mapper.forFile
+
+					type StampMapper = ContextAwareMapper[File, Stamp]
+					val binaryStampMapper: StampMapper  = Mapper.forStamp
+					val productStampMapper: StampMapper = Mapper.forStamp
+					val sourceStampMapper: StampMapper = Mapper.forStamp
+				}
+			  ```
 				</script>
 			</section>
 
@@ -465,6 +460,13 @@
 				</script>
 			</section>
 
+
+			<section data-markdown>
+				<script type="text/template">
+					## Where is my cache?
+				</script>
+			</section>
+
 		</section>
 
 		<!-- ################################################################################################################ -->
@@ -477,27 +479,13 @@
 			</section>
 
 			<section data-markdown>
-				<script type="text/template">
-					## Where is my cache?
-				</script>
-			</section>
-
-			<section data-markdown>
 			<script type="text/template">
 				### Supported workflows
 
 				1. Stash/StashApply
 				2. Cached release [In Progress]
-				3. More in future. I promise :)
+				3. More in future.
 			</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					### Stash/StashApply
-
-					Demo time!
-				</script>
 			</section>
 
 			<section data-markdown>
@@ -508,7 +496,6 @@
 					* Can be use anywhere without any setting
 					* User is responsible for using cache close to sources
 					* Useful to test core engine
-					* Stack overflow question TODO
 
 					[romanowski.github.io/hoarder/docs/stash.html](romanowski.github.io/hoarder/docs/stash.html)
 				</script>
@@ -518,18 +505,9 @@
 				<script type="text/template">
 					### Cached release [In Progress]
 
-					Demo time!
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					### Cached release [In Progress]
-
 					* Incremental compilation metadata is part of a release
-					* To load cache: _sbt TODO! version_
-					* In future: _sbt TODO! last_ and _sbt TODO! current_
-					* Aimed for open source projects (setup your workspace faster!)
+					* To load cache: _sbt loadRelease /version/_
+					* In future: support for _current_ and _last_ versions
 
 					[romanowski.github.io/hoarder/docs/cachedRelease.html](romanowski.github.io/hoarder/docs/cachedRelease.html)
 				</script>
@@ -551,6 +529,32 @@
 
 					Today's hackaton: Let's use hoarder in your project!
 
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					* Support for sbt 1.0 (sbt 1.0.0-X10 is released!)
+					* Support for zinc 1.0 in 0.13 worksapces (@jvican work)
+					* Support for IDEs
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					#### Incremental-aware library dependencies
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					Workflows:
+
+					* Abstract cache provider
+					* New cache detection mechanisms:
+					  * tag/commit based
+					  * provided by users
+					* Automatic cache application
 				</script>
 			</section>
 
