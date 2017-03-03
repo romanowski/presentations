@@ -66,15 +66,7 @@
 			</script>
 		</section>
 
-		<!-- ################################################################################################################ -->
-
 		<section>
-			<section data-markdown>
-				<script type="text/template">
-				# DRY Compiling!
-				</script>
-			</section>
-
 			<section data-markdown>
 				<script type="text/template">
 					#### Scala Days Copenhagen: Discount to win!
@@ -87,12 +79,11 @@
 
 					Send me a link to one
 
-					* gitter @romanowski
-					* tweet with #sbthorder hashtag
+					* tweet with [#sbthoarder](#sbthoarder) hashtag
+					* gitter [@romanowski](#sbthoarder)
 					* any other way
 				</script>
 			</section>
-
 		</section>
 
 		<!-- ################################################################################################################ -->
@@ -100,13 +91,23 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-					## Quick look at slow compiler
+				# DRY Compiling!
+				</script>
+			</section>
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					## Quick look at the slow compiler
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-					### My build usually take
+					### My build usually takes
 
 					|  | |
 					| -- | -- |
@@ -136,7 +137,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					## My full build usually take
+					## My full build usually takes
 
 					|  | |
 					| -- | -- |
@@ -184,7 +185,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					Sbt plugin around 'cached compilation' idea.
+					The sbt plugin around 'cached compilation' idea.
 
 					```scala
 					  // In your project/plugins.sbt or ~/.sbt/plugins.sbt
@@ -283,7 +284,7 @@
 			</section>
 
 
-			<section data-markdown class="small-code" style="top: 1px; width: 100%;font-size: 0.50em;">
+			<section data-markdown class="small-code" style="top: 1px; width: 100%; ">
 				<script type="text/template" style="max-height: 750px">
 					``` scala
 					format version: 5
@@ -493,9 +494,9 @@
 					### Stash/StashApply
 
 					* The simplest workflow
-					* Can be use anywhere without any setting
+					* Can be used anywhere without any setting
 					* User is responsible for using cache close to sources
-					* Useful to test core engine
+					* Useful to test the core engine
 
 					[romanowski.github.io/hoarder/docs/stash.html](romanowski.github.io/hoarder/docs/stash.html)
 				</script>
@@ -505,7 +506,7 @@
 				<script type="text/template">
 					### Cached release [In Progress]
 
-					* Incremental compilation metadata is part of a release
+					* Incremental compilation metadata is a part of a release
 					* To load cache: _sbt loadRelease /version/_
 					* In future: support for _current_ and _last_ versions
 
@@ -535,7 +536,7 @@
 			<section data-markdown>
 				<script type="text/template">
 					* Support for sbt 1.0 (sbt 1.0.0-X10 is released!)
-					* Support for zinc 1.0 in 0.13 worksapces (@jvican work)
+					* Support for zinc 1.0 in 0.13 workspaces (@jvican work)
 					* Support for IDEs
 				</script>
 			</section>
@@ -565,9 +566,9 @@
 
 			<section data-markdown>
 			<script type="text/template">
-			### Krzysztof Romanowski
+			[romanowski.github.io/hoarder](romanowski.github.io/hoarder)
 
-			romanowski.kr@gmail.com
+			<br>
 
 			<div style="margin-left: 36% text-align: left;">
 				<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
@@ -591,7 +592,7 @@
 
 <script>
 
-			// Full list of configuration options available at:
+			// The full list of configuration options available at:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
 				controls: true,
