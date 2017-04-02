@@ -4,8 +4,8 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Incremental Compiler: taming Scalac</title>
-	<meta name="description" content="What is and how works incremental compiler in sbt world">
+	<title>50 shades of Scala Compiler</title>
+	<meta name="description" content="TODO!">
 	<meta name="author" content="Krzysztof Romanowski">
 
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -71,21 +71,242 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## Title
+				## 50 shades of Scala Compiler
+				</script>
+			</section>
+		</section>
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					## How many scalac compiler is out there?
+
+					> Scala Compiler Sees Two Forks in One Week
+					Infoq on Sep 16, 2014 // https://www.infoq.com/news/2014/09/scala-compiler-forks
+				</script>
+			</section>
+		</section>
+
+		TODO add shades!
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					## scalac
+				</script>
+			</section>
+		</section>
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					The point of reference
+
+					<img src="imgs/scalac-bugs.png">
 
 				</script>
+				<aside class="notes">
+					- SLS (Scala language specification)- why not a point of reference
+					- John Pretty is probably the only users
+				</aside>
+			</section>
 
+			<section>
+				<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">OH: &quot;I get this compiler error.&quot; ... &quot;In Intellij or in real life?&quot;</p>&mdash; Miles Sabin (@milessabin) <a href="https://twitter.com/milessabin/status/841219815658393600">March 13, 2017</a></blockquote>
+				<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+			</section>
+		</section>
+
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					## Typelevel Scala and scalac
+
+					> Let the Scala compiler work for you
+				</script>
+			</section>
+		</section>
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					Playground for scala
+
+					TODO - drawing - scala + more
+
+
+					TODO fragment, better list
+					* Improved compile times for inductive implicits — Done
+					* Improved error reporting for implicit resolution failures — Done
+					* Support for alternative scala.Predef — Done
+					* Partial type application
+					* Multiple implicit parameter blocks
+					* Improved control over implicit prioritization
+					* GADT and singleton type bugfixes.
+					* Literal syntax for Byte and Short types.
+					* + SI-2712, SI-7046 + minor GADT fixes
+				</script>
+				<aside class="notes">
+					- Playground for scala
+					- SIP example http://docs.scala-lang.org/sips/pending/42.type.html
+					- TODO history https://skillsmatter.com/skillscasts/9043-typelevel-scala-rebooted?utm_content=buffer2f364&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer
+					- SI-2712 - https://issues.scala-lang.org/browse/SI-2712 Miles and
+					- https://milessabin.com/blog/2016/05/13/scalac-hacking/
+				</aside>
+			</section>
+
+			<section>
+				Should I use it?
+
+				TODO
+			</section>
+
+			<section>
+				More:
+
+				* https://skillsmatter.com/skillscasts/9043-typelevel-scala-rebooted?utm_content=buffer2f364&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer
+				TODO add more links!
+			</section>
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					## Triplequotes' Hydra compiler
+
+				</script>
+			</section>
+		</section>
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					Faster (parallel) scalac
+
+					<img src="imgs/hydra-times.png">
+
+					TODO - drawing - scala + SIP-25?
+
+				</script>
+				<aside class="notes">
+					- Commercial product
+					- Parallel scala + sharing
+ 				</aside>
+			</section>
+
+			<section>
+				Should I use it?
+			</section>
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					Do we want a compiler that does not support whole scala?
+				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-				## Plan
+					## Scala's toolbox compiler
 
-				1. ...
-
+					Let's compile and run scala code in runtime.
 				</script>
 			</section>
 
+			<section data-markdown>
+				<script type="text/template">
+					```scala
+					//TODO create toolbox code!
+					```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+
+					TODO - drawing: scala - a lot
+
+				</script>
+				<aside class="notes">
+					- Used e.g. in ScalaIDE expression evaluator
+					- alternative is scalac + tmpdir + classloading - a lot of problems
+				</aside>
+			</section>
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					## Incremental compilers!
+				</script>
+			</section>
+
+			// TODO http://users.cecs.anu.edu.au/~James.Popple/publications/theses/hons.pdf
+			<section data-markdown>
+				<script type="text/template">
+					Is incremental compiler different compiler?
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## What is incremental compiler?
+
+					> An incremental compiler is a kind of incremental computation applied to the field of compilation.
+
+					> A compiler is incremental if it provides the programmer with a recompiled version of the program "by expending an amount of effort which is proportional to the size of the change made by the programmer."
+					Popple, James (1987). Incremental Compilation and its Implementation in the PECAN Programming Environment Generator
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					# Incremental compiler = driver for scalac
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					# Incremental compiler = driver for scalac
+
+					//TODO - pic of the flow
+				</script>
+				<aside class="notes">
+					- Scalac can't recompile less then source
+					- Incremental compiler
+					- Pants - even finer grained apporach
+				</aside>
+			</section>
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					# Zinc: sbt incremental compiler
+				</script>
+
+				<section data-markdown>
+					<script type="text/template">
+						For sbt 0.13.x is placed in sbt itself and in typsafehub/zinc
+
+						In sbt 1.0.x pulled apart sbt to sbt/zinc
+					</script>
+				</section>
 		</section>
 
 		<!-- ################################################################################################################ -->
