@@ -20,6 +20,13 @@
 		font-size: 65% !important;
 		margin-left: 5%  !important;
 		}
+
+
+
+
+
+
+
 	</style>
 
 	<link rel="stylesheet" href="css/reveal.css">
@@ -35,6 +42,13 @@
 			link.type = 'text/css';
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
+
+
+
+
+
+
+
 	</script>
 
 	<!--[if lt IE 9]>
@@ -51,18 +65,18 @@
 
 		<section data-markdown>
 			<script type="text/template">
-			### Krzysztof Romanowski
+				### Krzysztof Romanowski
 
-			romanowski.kr@gmail.com
+				romanowski.kr@gmail.com
 
-			<div style="margin-left: 36% text-align: left;">
-				<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
-				<br/>
-				<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> RomanowskiKr
+				<div style="margin-left: 36% text-align: left;">
+					<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
+					<br/>
+					<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> RomanowskiKr
 
-			</div>
+				</div>
 
-			<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
+				<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
 			</script>
 		</section>
 
@@ -71,7 +85,7 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-				## 50 shades of Scala Compiler
+					## 50 shades of Scala Compiler
 				</script>
 			</section>
 		</section>
@@ -114,7 +128,9 @@
 			</section>
 
 			<section>
-				<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">OH: &quot;I get this compiler error.&quot; ... &quot;In Intellij or in real life?&quot;</p>&mdash; Miles Sabin (@milessabin) <a href="https://twitter.com/milessabin/status/841219815658393600">March 13, 2017</a></blockquote>
+				<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">OH: &quot;I get this compiler error.&quot;
+					... &quot;In Intellij or in real life?&quot;</p>&mdash; Miles Sabin (@milessabin) <a
+					href="https://twitter.com/milessabin/status/841219815658393600">March 13, 2017</a></blockquote>
 				<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 			</section>
 		</section>
@@ -154,7 +170,8 @@
 				<aside class="notes">
 					- Playground for scala
 					- SIP example http://docs.scala-lang.org/sips/pending/42.type.html
-					- TODO history https://skillsmatter.com/skillscasts/9043-typelevel-scala-rebooted?utm_content=buffer2f364&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer
+					- TODO history
+					https://skillsmatter.com/skillscasts/9043-typelevel-scala-rebooted?utm_content=buffer2f364&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer
 					- SI-2712 - https://issues.scala-lang.org/browse/SI-2712 Miles and
 					- https://milessabin.com/blog/2016/05/13/scalac-hacking/
 				</aside>
@@ -169,7 +186,8 @@
 			<section>
 				More:
 
-				* https://skillsmatter.com/skillscasts/9043-typelevel-scala-rebooted?utm_content=buffer2f364&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer
+				*
+				https://skillsmatter.com/skillscasts/9043-typelevel-scala-rebooted?utm_content=buffer2f364&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer
 				TODO add more links!
 			</section>
 		</section>
@@ -198,7 +216,7 @@
 				<aside class="notes">
 					- Commercial product
 					- Parallel scala + sharing
- 				</aside>
+				</aside>
 			</section>
 
 			<section>
@@ -299,36 +317,302 @@
 				<script type="text/template">
 					# Zinc: sbt incremental compiler
 				</script>
+			</section>
 
-				<section data-markdown>
-					<script type="text/template">
-						For sbt 0.13.x is placed in sbt itself and in typsafehub/zinc
+			<section data-markdown>
+				<script type="text/template">
+					For sbt 0.13.x is placed in sbt itself and in typsafehub/zinc
 
-						In sbt 1.0.x pulled apart sbt to sbt/zinc
-					</script>
-				</section>
+					In sbt 1.0.x pulled apart sbt to sbt/zinc
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					// Zinc onion: zinc -> compiler-bridge -> scala compiler
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO - zinc support
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					drawing for zinc phases
+				</script>
+			</section>
+
 		</section>
 
 		<!-- ################################################################################################################ -->
 
 		<section>
+			<section data-markdown>
+				<script type="text/template">
+					# Intellij's incremental compiler
+				</script>
+			</section>
 
 			<section data-markdown>
-			<script type="text/template">
-			### Krzysztof Romanowski
+				<script type="text/template">
+					JVM-generic - it is part of intellij itself
 
-			romanowski.kr@gmail.com
+					Nailgun - keep your compiler hot!
+				</script>
+			</section>
 
-			<div style="margin-left: 36% text-align: left;">
-				<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
-				<br/>
-				<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> RomanowskiKr
+			<section data-markdown>
+				<script type="text/template">
+					Sidenote: Why do you need to keep your compiler (nailgun, sbt, etc) hot!
 
-			</div>
+					TODO: Rory's talk
+				</script>
+			</section>
 
-			<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
-			</script>
+			<section data-markdown>
+				<script type="text/template">
+					//TODO - intellij's support
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					// intellij's onion: bytecode -> zinc's compiler-bridge -> scala compiler
+				</script>
+			</section>
 		</section>
+
+		<!-- ################################################################################################################ -->
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					Presentation compiler?
+				</script>
+				<aside>
+					- Have you ever use presentation compiler?
+					- Have you ever use Intellij/ScalaIDE/Ensime? <- you should raise your hand now!
+				</aside>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Presentation compiler
+					// TODO pics of errors
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Presentation compiler
+
+					// TODO pics of code completion
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Presentation compiler
+
+					// TODO pics of refactoring
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					| compiler | presentation-compiler |
+					| -- | -- |
+					| produce bytecode | answer questions |
+					| should fail ASAP | should provide as much data as possible |
+					| batch mode | interactive mode |
+					| TODO more | TODO more |
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					Is presentation compiler **a compiler**?
+				</script>
+			</section>
+		</section>
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					# scalac presentation compiler
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO - scalac presentation compiler support - with response time
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					// scalac presentation compiler flow: full build -> rebuild of source
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					| compiler | presentation-compiler | scalac presentation compiler |
+					| -- | -- | -- |
+					| produce bytecode | answer questions | OK |
+					| should fail ASAP | should provide as much data as possible | all or none |
+					| batch mode | interactive mode | interactive after initial batch mode |
+					| TODO more | TODO more | TODO more |
+				</script>
+			</section>
+
+			<section>
+				<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">OH: &quot;I get this compiler error.&quot;
+					... &quot;In Intellij or in real life?&quot;</p>&mdash; Miles Sabin (@milessabin) <a
+					href="https://twitter.com/milessabin/status/841219815658393600">March 13, 2017</a></blockquote>
+				<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+				TODO - not apply here!
+			</section>
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					# scalac presentation compiler
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO - scalac presentation compiler support - with response time
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					// scalac presentation compiler flow: full build -> rebuild of source
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					| compiler | presentation-compiler | scalac presentation compiler |
+					| -- | -- | -- |
+					| produce bytecode | answer questions | OK |
+					| should fail ASAP | should provide as much data as possible | all or none |
+					| batch mode | interactive mode | interactive after initial batch mode |
+					| TODO more | TODO more | TODO more |
+				</script>
+			</section>
+
+			<section>
+				<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">OH: &quot;I get this compiler error.&quot;
+					... &quot;In Intellij or in real life?&quot;</p>&mdash; Miles Sabin (@milessabin) <a
+					href="https://twitter.com/milessabin/status/841219815658393600">March 13, 2017</a></blockquote>
+				<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+				TODO - not apply here!
+			</section>
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					# Intellij presentation compiler
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO - intellij presentation compiler support - with holes etc
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					// scalac presentation compiler flow: process source and ask dependencies
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO pic with intellij as one of a kind - not based on scalac
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					Committers - Jason Zaugg share
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					| compiler | presentation-compiler | intellij presentation compiler |
+					| -- | -- | -- |
+					| produce bytecode | answer questions | OK |
+					| should fail ASAP | should provide as much data as possible | OK |
+					| batch mode | interactive mode | OK |
+					| TODO more | TODO more | TODO more |
+				</script>
+			</section>
+
+			<section>
+				<script type="text/template">
+
+					<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">OH: &quot;I get this compiler error.&quot;
+						... &quot;In Intellij or in real life?&quot;</p>&mdash; Miles Sabin (@milessabin) <a
+						href="https://twitter.com/milessabin/status/841219815658393600">March 13, 2017</a></blockquote>
+					<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+				Macros, deeply nested implicits, strange types... and more
+			</section>
+
+			<section>
+				<script type="text/template">
+					scala.meta?
+				</script>
+			</section>
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+
+				</script>
+			</section>
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					### Krzysztof Romanowski
+
+					romanowski.kr@gmail.com
+
+					<div style="margin-left: 36% text-align: left;">
+						<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
+						<br/>
+						<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> RomanowskiKr
+
+					</div>
+
+					<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
+				</script>
+			</section>
 		</section>
 
 		<!-- ################################################################################################################ -->
@@ -361,19 +645,6 @@
 					{ src: 'plugin/notes/notes.js', async: true }
 				]
 			});
-
-
-
-
-
-
-
-
-
-
-
 </script>
-
 </body>
 </html>
-adventurous
