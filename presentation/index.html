@@ -95,6 +95,22 @@
 					> [Infoq on Sep 16, 2014](https://www.infoq.com/news/2014/09/scala-compiler-forks)
 				</script>
 			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Compiler
+
+					//TODO Compiler definition
+
+					Note:
+					Sth is a 'scala compiler' if:
+					* scala sources as input
+
+					* understand types and report type failure
+
+					* TODO?
+				</script>
+			</section>
 		</section>
 
 		<!-- ################################################################################################################ -->
@@ -115,13 +131,39 @@
 					<img src="imgs/scalac-bugs.png">
 
 					Notes:
-					* SLS (Scala language specification)- why not a point of reference
+					* SLS (Scala language specification)- why not a point of reference //TODO check that
+
+					* scalac from command line
 
 					* John Pretty is probably the only users
 				</script>
 			</section>
 		</section>
 
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					## dotty
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO research slide who, why, where
+				</script>
+			</section>
+
+			<section data-markdown data-separator-notes="Notes:">
+				<script type="text/template">
+
+
+					// TODO pic of dotty
+
+
+					Notes:
+				</script>
+			</section>
+		</section>
 
 		<!-- ################################################################################################################ -->
 
@@ -154,6 +196,8 @@
 					* + SI-2712, SI-7046 + minor GADT fixes
 
 					Notes:
+					- Fameous fix infos //TODO
+
 					- Playground for scala
 
 					- SIP example http://docs.scala-lang.org/sips/pending/42.type.html
@@ -171,7 +215,7 @@
 				<script type="text/template" data-separator-notes="Notes:">
 				Should I use it?
 
-				TODO
+				TODO from website
 				</script>
 			</section>
 
@@ -228,6 +272,11 @@
 					50%! <a href="https://twitter.com/hashtag/scala?src=hash">#scala</a></p>&mdash; etorreborre (@etorreborre) <a
 					href="https://twitter.com/etorreborre/status/830105082465103872">February 10, 2017</a></blockquote>
 				<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+				<aside>
+					- Eric Torreborre
+					- spec2 + eff monad
+				</aside>
 			</section>
 		</section>
 
@@ -270,6 +319,8 @@
 					TODO - drawing: scala - a lot
 
 					Notes:
+					- Problems with enumeration of packages //TODO find more
+
 					- Used e.g. in ScalaIDE expression evaluator
 
 					- alternative is scalac + tmpdir + classloading - a lot of problems
@@ -338,13 +389,7 @@
 				<script type="text/template">
 					# Zinc
 					## sbt incremental compiler
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					### The story of Zinc?
-					sbt incremental compiler ~> sbt-incremental compiler ~> sbt-inc compiler ~> s-inc compiler ~> zinc compiler
+					// TODO fragment
 				</script>
 			</section>
 
@@ -355,6 +400,15 @@
 					In sbt 1.0.x pulled apart sbt to sbt/zinc
 
 					//TODO some history from old repo, nailgun etc https://github.com/typesafehub/zinc/commits/master?after=1e405d820cd051610578e4b372db0b668753de6b+244
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### The story of Zinc?
+					sbt incremental compiler ~> sbt-incremental compiler ~> sbt-inc compiler ~> s-inc compiler ~> zinc compiler
+
+					//TODO remove that?
 				</script>
 			</section>
 
@@ -411,7 +465,7 @@
 			<section data-markdown>
 				<script type="text/template">
 					## Intellij's
-					##incremental compiler
+					## incremental compiler
 				</script>
 			</section>
 
@@ -565,15 +619,15 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					//TODO - intellij presentation compiler support - with holes etc
+					//TODO intellij presentation compiler flow: process source and ask dependencies
+
+					//TODO pic analysis in process
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-					//TODO intellij presentation compiler flow: process source and ask dependencies
-
-					//TODO pic analysis in process
+					//TODO pic with intellij as one of a kind - not based on scalac
 				</script>
 			</section>
 
@@ -585,7 +639,7 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					//TODO pic with intellij as one of a kind - not based on scalac
+					//TODO - intellij presentation compiler support - with holes etc
 				</script>
 			</section>
 
@@ -620,9 +674,28 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-					TODO Kentucky mule?
+					//TODO Kentucky mule?
 				</script>
 			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO Compiler plugins
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO Macros
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO fade away
+				</script>
+			</section>
+
 		</section>
 
 		<!-- ################################################################################################################ -->
@@ -648,6 +721,23 @@
 		</section>
 
 		<!-- ################################################################################################################ -->
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					# Presentation compiler hints!
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					# Incremental compiler hints!
+				</script>
+			</section>
+		</section>
+
 	</div>
 
 </div>
