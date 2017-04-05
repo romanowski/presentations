@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 
 	<title>50 shades of Scala Compiler</title>
-	<meta name="description" content="TODO!">
+	<meta name="description" content="Overview of scala compilers">
 	<meta name="author" content="Krzysztof Romanowski">
 
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -100,7 +100,9 @@
 				<script type="text/template">
 					## Compiler
 
-					//TODO Compiler definition
+					> A compiler is a computer program (or a set of programs) that transforms source code written in a programming language (the source language) into another computer language (the target language), with the latter often having a binary form known as object code.
+					>
+					> wikipedia
 
 					Note:
 					Sth is a 'scala compiler' if:
@@ -108,7 +110,7 @@
 
 					* understand types and report type failure
 
-					* TODO?
+					* better quotation is needed
 				</script>
 			</section>
 		</section>
@@ -126,16 +128,14 @@
 				<script type="text/template">
 					The point of reference
 
-					// TODO pic of scalac
+					<img src="imgs/scala-cover.png" style="max-width: 350px; background: none; border: none; margin: 15px"/>
+					<img class="fragment" src="imgs/scalac-bugs.png" style="max-width: 650px; position: absolute; left: 133px; top: 301px;">
 
-					<img src="imgs/scalac-bugs.png">
 
 					Notes:
-					* SLS (Scala language specification)- why not a point of reference //TODO check that
+					* SLS (Scala language specification) should be used here - but no tests are created (but should)
 
-					* scalac from command line
-
-					* John Pretty is probably the only users
+					* scalac from command line, John Pretty is probably the only users
 				</script>
 			</section>
 		</section>
@@ -155,10 +155,7 @@
 
 			<section data-markdown data-separator-notes="Notes:">
 				<script type="text/template">
-
-
 					// TODO pic of dotty
-
 
 					Notes:
 				</script>
@@ -177,45 +174,27 @@
 			</section>
 
 			<section data-markdown>
-				<script type="text/template" data-separator-notes="Notes:">
+				<script type="text/template">
 					Playground for scala
 
-					TODO - drawing - scala + more
+					<img src="imgs/typelevelscala-cover.png" style="max-width: 350px; background: none; border: none; margin: 15px">
 
 
-					TODO fragment, better list
+					* Improved compile times for inductive implicits <!-- .element: class="fragment" -->
+					* Improved error reporting for implicit resolution failures <!-- .element: class="fragment" -->
+					* Support for alternative scala.Predef <!-- .element: class="fragment" -->
+					* Even more on roadmap <!-- .element: class="fragment" -->
 
-					* Improved compile times for inductive implicits — Done
-					* Improved error reporting for implicit resolution failures — Done
-					* Support for alternative scala.Predef — Done
-					* Partial type application
-					* Multiple implicit parameter blocks
-					* Improved control over implicit prioritization
-					* GADT and singleton type bugfixes.
-					* Literal syntax for Byte and Short types.
-					* + SI-2712, SI-7046 + minor GADT fixes
+					Note:
+					- Fameous fix: SI-2712 for Partial unification of type constructors
 
-					Notes:
-					- Fameous fix infos //TODO
+					- Playground for scala, use if you are affected by bugs it fixes (instead of workaround it yourself)
 
-					- Playground for scala
+					- SIP-23 as example http://docs.scala-lang.org/sips/pending/42.type.html
 
-					- SIP example http://docs.scala-lang.org/sips/pending/42.type.html
-
-					- TODO history
+					- TODO? history
 					https://skillsmatter.com/skillscasts/9043-typelevel-scala-rebooted?utm_content=buffer2f364&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer
 
-					- SI-2712 - https://issues.scala-lang.org/browse/SI-2712 Miles and
-
-					- https://milessabin.com/blog/2016/05/13/scalac-hacking/
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template" data-separator-notes="Notes:">
-				Should I use it?
-
-				TODO from website
 				</script>
 			</section>
 
@@ -223,9 +202,9 @@
 				<script type="text/template" data-separator-notes="Notes:">
 					More:
 
-					* [Mails's talks at ScalaExchange](https://skillsmatter.com/skillscasts/9043-typelevel-scala-rebooted?utm_content=buffer2f364&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer)
-					* [TODO]()
-					* [TODO]()
+					* Mails's talks at [ScalaExchange 2016](https://skillsmatter.com/skillscasts/9043-typelevel-scala-rebooted)
+					* Official page: [typelevel.org/scala](http://typelevel.org/scala/)
+					* Hackking on scala: [milessabin.com/blog/2016/05/13/scalac-hacking](https://milessabin.com/blog/2016/05/13/scalac-hacking)
 				</script>
 			</section>
 		</section>
@@ -244,6 +223,9 @@
 					### Faster (parallel) scalac
 
 					<img src="imgs/hydra-times.png">
+					Note:
+					* best speed up is 6x on 10 cores
+
 				</script>
 			</section>
 
@@ -251,7 +233,9 @@
 				<script type="text/template">
 					Triplequotes' Hydra compiler
 
-					TODO - drawing - scala + SIP-25?
+					<img src="imgs/hydra-cover.png" style="max-width: 350px; background: none; border: none; margin: 15px"/>
+
+					* SIP-25 in future <!-- .element: class="fragment" -->
 
 					Notes:
 
@@ -288,6 +272,8 @@
 				<script type="text/template">
 					Do we want a compiler that does not support whole scala?
 
+					<img class="fragment" src="imgs/partial-cover.png" style="max-width: 350px; background: none; border: none; margin: 15px"/>
+
 				</script>
 			</section>
 
@@ -304,22 +290,24 @@
 				</script>
 			</section>
 
-			<section data-markdown>
-				<script type="text/template">
-					Let's compile and run scala code in runtime.
+			<section>
+				<h4> Let's compile and run scala code in runtime</h4>
+				<script src="https://gist.github.com/romanowski/8fcdf9c808b56eb6223e18c9b7715ea8.js"></script>
 
-					```scala
-					//TODO create toolbox code!
-					```
-				</script>
+				Note:
+				- better code then gist?
 			</section>
 
 			<section data-markdown data-separator-notes="Notes:">
 				<script type="text/template">
-					TODO - drawing: scala - a lot
+					Toolbox - scalac in different universe
+
+					<img src="imgs/toolbox-cover.png" style="max-width: 350px; background: none; border: none; margin: 15px"/>
 
 					Notes:
-					- Problems with enumeration of packages //TODO find more
+					- TODO - better drawing!
+
+					- Problems with enumeration of packages, strange nameing convention etc.
 
 					- Used e.g. in ScalaIDE expression evaluator
 
@@ -377,7 +365,7 @@
 					Notes:
 					* Scalac can't recompile less then source
 
-					* Pants, bazel -  finer grain approach
+					* Pants, bazel - finer grain approach - TODO read about it!
 				</script>
 			</section>
 		</section>
@@ -388,18 +376,7 @@
 			<section data-markdown>
 				<script type="text/template">
 					# Zinc
-					## sbt incremental compiler
-					// TODO fragment
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					For sbt 0.13.x is placed in sbt itself and in typsafehub/zinc
-
-					In sbt 1.0.x pulled apart sbt to sbt/zinc
-
-					//TODO some history from old repo, nailgun etc https://github.com/typesafehub/zinc/commits/master?after=1e405d820cd051610578e4b372db0b668753de6b+244
+					## sbt incremental compiler <!-- .element: class="fragment" -->
 				</script>
 			</section>
 
@@ -408,9 +385,17 @@
 					### The story of Zinc?
 					sbt incremental compiler ~> sbt-incremental compiler ~> sbt-inc compiler ~> s-inc compiler ~> zinc compiler
 
-					//TODO remove that?
+					For sbt 0.13.x is placed in sbt itself and in typsafehub/zinc
+
+					In sbt 1.0.x pulled apart sbt to sbt/zinc
+
+					Note:
+					* TODO some history from old repo, nailgun etc https://github.com/typesafehub/zinc/commits/master?after=1e405d820cd051610578e4b372db0b668753de6b+244
+
+					* TODO name story to remove?
 				</script>
 			</section>
+
 
 			<section data-markdown>
 				<script type="text/template">
@@ -451,9 +436,11 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					Shameless plug: Hoarder
+					### Shameless plug: Hoarder
 
-					TODO: Hoarder
+					Don’t repeat yourself when compiling!
+
+					[github.com/romanowski/hoarder](https://github.com/romanowski/hoarder)
 				</script>
 			</section>
 
@@ -480,10 +467,9 @@
 					//TODO - intellij's support
 
 					Note:
-					- keep your compiler hot!
-
 					- macros, implicits potential usage in scala
 
+					- keep your compiler hot
 				</script>
 			</section>
 
@@ -511,7 +497,7 @@
 					Note:
 					- Have you ever use presentation compiler?
 
-					- Have you ever use Intellij/ScalaIDE/Ensime? <- you should raise your hand now!
+					- Have you ever use Intellij/ScalaIDE/Ensime? if so all of you should raise your before!
 				</script>
 			</section>
 
@@ -544,7 +530,7 @@
 					| -- | -- |
 					| produce bytecode + errors/warnings | answer questions |
 					| should fail ASAP | should provide as much data as possible |
-					| batch mode | interactive mode, as demon |
+					| batch mode | interactive mode |
 					| don't share any data | provide data to other tools (e.g. refactorings) |
 				</script>
 			</section>
@@ -553,7 +539,8 @@
 				<script type="text/template">
 					Is presentation compiler **a compiler**?
 
-					// TODO some sources about it
+					Note:
+					* //TODO some sources about it
 				</script>
 			</section>
 		</section>
@@ -570,6 +557,9 @@
 			<section data-markdown>
 				<script type="text/template">
 					// scalac presentation compiler flow: full build -> rebuild of source
+
+					Note:
+					- TODO check this and find perks
 				</script>
 			</section>
 
@@ -580,7 +570,7 @@
 					| answer questions | OK |
 					| should provide as much data as possible | all or none |
 					| interactive mode | interactive after initial batch mode |
-					| TODO more | TODO more |
+					| provide data to other tools | data are provided as pieces of code evaluated in compiler context |
 				</script>
 			</section>
 
@@ -591,9 +581,9 @@
 					Note:
 					- used in ScalaIDE and ensime
 
-					- ensime try to do as much as possible without it
+					- ensime: try to do as much as possible without it
 
-					- full support for macros,
+					- full support for macros and other crazy stuff
 				</script>
 			</section>
 
@@ -603,7 +593,7 @@
 					href="https://twitter.com/milessabin/status/841219815658393600">March 13, 2017</a></blockquote>
 				<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-				TODO - not apply here!
+				TODO -  pic not apply here!
 			</section>
 		</section>
 
@@ -627,24 +617,6 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					//TODO pic with intellij as one of a kind - not based on scalac
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					Committers - Jason Zaugg share
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					//TODO - intellij presentation compiler support - with holes etc
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
 					| ideal presentation-compiler | scalac presentation compiler |
 					| -- | -- |
 					| answer questions | OK |
@@ -654,19 +626,36 @@
 				</script>
 			</section>
 
+			<section data-markdown>
+				<script type="text/template">
+					//TODO pic with intellij as one of a kind - not based on scalac
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					<img src="imgs/jason-contribitutions.png"/>
+
+					[github.com/JetBrains/intellij-scala/graphs/contributors](https://github.com/JetBrains/intellij-scala/graphs/contributors)
+					Note:
+					* Intellij's presentaiton compilers has Jason Zaugg in common with scalac :)
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO - intellij presentation compiler support - with holes etc
+				</script>
+			</section>
+
 			<section>
 				<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">OH: &quot;I get this compiler error.&quot;
 					... &quot;In Intellij or in real life?&quot;</p>&mdash; Miles Sabin (@milessabin) <a
 					href="https://twitter.com/milessabin/status/841219815658393600">March 13, 2017</a></blockquote>
 
-				Macros, deeply nested implicits, strange types... and more
+				Macros, deeply nested implicits, strange types... scala.meta as a rescue?
 			</section>
 
-			<section data-markdown>
-				<script type="text/template">
-				scala.meta?
-				</script>
-			</section>
 		</section>
 
 		<!-- ################################################################################################################ -->
