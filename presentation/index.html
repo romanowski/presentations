@@ -20,7 +20,9 @@
 			font-size: 65% !important;
 			margin-left: 5%  !important;
 		}
-
+		blockquote {
+			width: 100% !important;
+		}
 
 
 	</style>
@@ -293,9 +295,6 @@
 			<section>
 				<h4> Let's compile and run scala code in runtime</h4>
 				<script src="https://gist.github.com/romanowski/8fcdf9c808b56eb6223e18c9b7715ea8.js"></script>
-
-				Note:
-				- better code then gist?
 			</section>
 
 			<section data-markdown data-separator-notes="Notes:">
@@ -303,6 +302,11 @@
 					Toolbox - scalac in different universe
 
 					<img src="imgs/toolbox-cover.png" style="max-width: 350px; background: none; border: none; margin: 15px"/>
+
+					* <!-- .element: class="fragment" --> Imports handling [SI-6393](https://issues.scala-lang.org/browse/SI-6393) [SI-6393](SI-6393)
+					* <!-- .element: class="fragment" --> Positions handling [SI-8465](SI-8465)
+					* <!-- .element: class="fragment" --> Even types handling [SI-8724](SI-8724)
+					* <!-- .element: class="fragment" --> and much, [much more](https://issues.scala-lang.org/browse/SI-5748?jql=project%20%3D%20SI%20AND%20component%20%3D%20Reflection%20AND%20status%20%3D%20Open%20AND%20description%20~%20toolbox)
 
 					Notes:
 					- TODO - better drawing!
@@ -313,6 +317,20 @@
 
 					- alternative is scalac + tmpdir + classloading - a lot of problems
 
+				</script>
+			</section>
+		</section>
+
+		<!-- ################################################################################################################ -->
+
+		<section>
+			<section data-markdown>
+				<script type="text/template">
+					## New backends
+					## scalanative, scalameta
+
+					Note:
+					- TODO
 				</script>
 			</section>
 		</section>
@@ -344,7 +362,7 @@
 				<script type="text/template">
 					> A compiler is incremental if it provides the programmer with a recompiled version of the program "by expending an amount of effort which is proportional to the size of the change made by the programmer."
 					>
-					> Popple, James (1987). Incremental Compilation and its Implementation in the PECAN Programming Environment Generator
+					> &mdash; Popple, James (1987). Incremental Compilation and its Implementation in the PECAN Programming Environment Generator
 				</script>
 			</section>
 
@@ -356,13 +374,15 @@
 				</script>
 			</section>
 
-			<section data-markdown  data-separator-notes="Notes:">
+			<section data-markdown>
 				<script type="text/template">
 					Incremental compiler = driver for scalac
 
-					//TODO - pic of the flow
+					<img src="imgs/incremental-flow.png" style="max-width: 350px; background: none; border: none; margin: 15px">
 
-					Notes:
+					Note:
+					* TODO - add other examples - with different files changed
+
 					* Scalac can't recompile less then source
 
 					* Pants, bazel - finer grain approach - TODO read about it!
@@ -376,14 +396,29 @@
 			<section data-markdown>
 				<script type="text/template">
 					# Zinc
-					## sbt incremental compiler <!-- .element: class="fragment" -->
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### sbt incremental compiler
+
+					sbt-incremental compiler <!-- .element: class="fragment" -->
+
+					sbt-inc compiler  <!-- .element: class="fragment" -->
+
+					s-inc compiler  <!-- .element: class="fragment" -->
+
+					## zinc compiler <!-- .element: class="fragment" -->
+
+					Note:
+					* add replace
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
 					### The story of Zinc?
-					sbt incremental compiler ~> sbt-incremental compiler ~> sbt-inc compiler ~> s-inc compiler ~> zinc compiler
 
 					For sbt 0.13.x is placed in sbt itself and in typsafehub/zinc
 
@@ -399,19 +434,20 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					// TODO Pic Zinc onion: zinc -> compiler-bridge -> scala compiler
-				</script>
-			</section>
+					### compiler bridge
 
-			<section data-markdown>
-				<script type="text/template">
-					//TODO drawing for zinc phases
+					<img src="imgs/zinc-onion.png" style="max-width: 350px; background: none; border: none; margin: 15px">
+
+					sbt 0.13.x is still on 2.10.x but compiles 2.12.x workspaces
 				</script>
 			</section>
 
 			<section data-markdown  data-separator-notes="Notes:">
 				<script type="text/template">
-					//TODO - zinc support
+					### zinc
+
+					<img class="current-visible" src="imgs/scala-cover.png" style="max-width: 350px; background: none; border: none; margin: 15px"/>
+					<img class="fragment current-visible" src="imgs/zinc-cover.png" style="max-width: 350px; background: none; border: none; margin: 15px"/>
 
 					Notes:
 					* new layer of possible failures
@@ -451,39 +487,32 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-					## Intellij's
+					## Intellij
 					## incremental compiler
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-					// intellij's onion: bytecode -> zinc's compiler-bridge -> scala compiler
+					#### Intellij incremental compiler
+
+					<img class="current-visible" src="imgs/intellij-onion.png" style="max-width: 450px; background: none; border: none; margin: 15px"/>
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-					//TODO - intellij's support
+					### Intellij's incremental compiler
+
+					<img src="imgs/scala-cover.png" style="max-width: 350px; background: none; border: none; margin: 15px"/>
+					<img class="fragment" src="imgs/zinc-cover.png" style="max-width: 350px; background: none; border: none; margin: 15px"/>
 
 					Note:
+					- TODO add more holes!
+
 					- macros, implicits potential usage in scala
 
-					- keep your compiler hot
-				</script>
-			</section>
-
-			<section data-markdown>
-				<script type="text/template">
-					//TODO - implicit example not handled by Intellij
-				</script>
-			</section>
-
-			<section data-markdown data-separator-notes="alamakotawpaski:">
-				<script type="text/template" >
-					Sidenote: Why do you need to keep your compiler (nailgun, sbt, etc) hot!
-
-					TODO: Rory's talk
+					- keep your compiler hot - even 35% faster compilation
 				</script>
 			</section>
 		</section>
@@ -504,7 +533,8 @@
 			<section data-markdown>
 				<script type="text/template">
 					#### Instant typing
-					// TODO pics of errors
+
+					<img src="imgs/presentationCompilerError.png">
 				</script>
 			</section>
 
@@ -512,7 +542,7 @@
 				<script type="text/template">
 					#### Code completion
 
-					// TODO pics of code completion
+					<img src="imgs/codeCompletion.png">
 				</script>
 			</section>
 
@@ -520,7 +550,7 @@
 				<script type="text/template">
 					#### Refactorings
 
-					// TODO pics of refactoring
+					<img src="imgs/refactorings.png">
 				</script>
 			</section>
 
@@ -535,14 +565,14 @@
 				</script>
 			</section>
 
-			<section data-markdown>
+<!--			<section data-markdown>
 				<script type="text/template">
 					Is presentation compiler **a compiler**?
 
 					Note:
 					* //TODO some sources about it
 				</script>
-			</section>
+			</section>-->
 		</section>
 		<!-- ################################################################################################################ -->
 
@@ -603,15 +633,16 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-					# Intellij presentation compiler
+					## Intellij presentation compiler
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-					//TODO intellij presentation compiler flow: process source and ask dependencies
+					### Intellij presentation compiler
+					<img class="fragment current-visible" src="imgs/intellij-pc-flow.png">
 
-					//TODO pic analysis in process
+					<img class="fragment current-visible" src="imgs/analysis-in-progress.png">
 				</script>
 			</section>
 
@@ -663,25 +694,50 @@
 		<section>
 			<section data-markdown>
 				<script type="text/template">
-					//TODO Kentucky mule?
+					Is there anything more?
+				</script>
+			</section>
+
+
+
+			<section data-markdown>
+				<script type="text/template">
+					#### Kentucky mule
+
+					[github.com/gkossakowski/kentuckymule](https://github.com/gkossakowski/kentuckymule) <!-- .element: class="fragment" -->
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-					//TODO Compiler plugins
+					### Macro paradise
+
+					> I have always imagined that paradise will be a kind of library.
+					>
+					> Jorge Luis Borges, “Poem of the Gifts”
+
+					Note:
+					- TODO better hyphen
+
+					- TODO read about it
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-					//TODO Macros
+					## Compiler plugins
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-					//TODO fade away
+					## Macros
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## DSLs
 				</script>
 			</section>
 
