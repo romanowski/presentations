@@ -479,8 +479,10 @@
 				### Supported workflows
 
 				1. Stash/StashApply
-				2. Cached release [In Progress]
-				3. More in future.
+				2. PR verification (Travis)
+				2. Cached release [BETA]
+
+				More planned.
 			</script>
 			</section>
 
@@ -499,13 +501,47 @@
 
 			<section data-markdown>
 				<script type="text/template">
-					### Cached release [In Progress]
+					### PR verification (Travis)
+
+					* Designed to speed up PR verification
+					* Require caching mechanism for your CI engine (but can use e.g. S3)
+					* Required post-merge builds to verify code and generate new cache
+					* You need to pay attention to postmerge build
+					* Easy way to create a new caches TODO (example)
+
+					[romanowski.github.io/hoarder/docs/prVerification.html](romanowski.github.io/hoarder/docs/prVerification.html)
+				</script>
+			</section>
+
+
+			<section data-markdown>
+				<script type="text/template">
+					<img src="imgs/setup.png">
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					### Cached release [BETA]
 
 					* Incremental compilation metadata is a part of a release
 					* To load cache: _sbt loadRelease /version/_
 					* In future: support for _current_ and _last_ versions
 
 					[romanowski.github.io/hoarder/docs/cachedRelease.html](romanowski.github.io/hoarder/docs/cachedRelease.html)
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					//TODO ls -al from cache
+					```bash
+					> ls -al /...
+					1
+					a
+					a
+
+					```
 				</script>
 			</section>
 
@@ -522,16 +558,12 @@
 			<section data-markdown>
 				<script type="text/template">
 					## Testing
-
-					Today's hackaton: Let's use hoarder in your project!
-
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
-					* Support for sbt 1.0 (sbt 1.0.0-X10 is released!)
-					* Support for zinc 1.0 in 0.13 workspaces (@jvican work)
+					* Support for sbt 1.0 (sbt 1.0.0-M6 is released!)
 					* Support for IDEs
 				</script>
 			</section>
@@ -539,6 +571,8 @@
 			<section data-markdown>
 				<script type="text/template">
 					#### Incremental-aware library dependencies
+
+					TODO slides
 				</script>
 			</section>
 
