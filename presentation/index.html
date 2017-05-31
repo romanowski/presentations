@@ -21,6 +21,14 @@
 		margin-left: 5%  !important;
 		}
 
+		.reveal a {
+      color: #dcdcdc !important;
+    }
+
+    .reveal pre code {
+			background: #244194 !important;
+    }
+
 
 	</style>
 
@@ -55,24 +63,37 @@
 
 		<section data-markdown data-background-image="imgs/bg.png">
 			<script type="text/template">
-				### Krzysztof Romanowski
+				<br>
+				<br>
+				<br>
 
-				romanowski.kr@gmail.com
+				# DRY Compiling!
 
-				<div style="margin-left: 36% text-align: left;">
-					<img src="imgs/gh.png" style="background: none; border: none; margin: 0px"> romanowski
-					<br/>
-					<img src="imgs/twitter.png" style="background: none; border: none; margin: 0px"> RomanowskiKr
+				## Krzysztof Romanowski
 
-				</div>
+				<br>
+				<br>
+				<br>
+
 
 				<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
 			</script>
 		</section>
 
 		<section data-markdown data-background-image="imgs/2nd.png">
+		</section>
+
+		<section data-markdown>
 			<script type="text/template">
-				### Krzysztof Romanowski
+				## Let's start compilation
+			</script>
+		</section>
+
+		<section data-markdown data-background-image="imgs/bg.png">
+			<script type="text/template">
+				## Krzysztof Romanowski
+
+
 
 				romanowski.kr@gmail.com
 
@@ -90,27 +111,17 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown data-background-image="imgs/bg.png"> 
-				<script type="text/template">
-					# DRY Compiling!
-				</script>
-			</section>
-		</section>
-
-		<!-- ################################################################################################################ -->
-
-		<section>
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					## Quick look at the slow compiler
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					### My usual build takes
+					### My build usually takes
 
-					(this is usually incremental ones)
+					(incremental one)
 
 					|  | |
 					| -- | -- |
@@ -121,7 +132,14 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
+				<script type="text/template">
+					<img src="imgs/li.png"/>
+					[twitter.com/li_haoyi/status/742689412308467712](https://twitter.com/li_haoyi/status/742689412308467712)
+				</script>
+			</section>
+
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					| project | 'cold' | 'warm'
 					| -- | -- | -- |
@@ -131,16 +149,15 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					## Most of this builds is
-					#incremental
+					## Keep your jvm (sbt) hot!
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					## My usual full build takes
+					## My full build usually takes
 
 					|  | |
 					| -- | -- |
@@ -153,15 +170,15 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					<img src="imgs/compiling.png"/>
 
-					https://xkcd.com/303/
+					xkcd.com/303
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					| project | time |
 					| -- | -- | -- |
@@ -170,87 +187,82 @@
 					| akka | 316s |
 				</script>
 			</section>
-			<section data-markdown data-background-image="imgs/bg.png"> 
+
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					Can we do better?
+					Codebase I am working with:
+
+					* big Scala project: 2 MLoC
+					* over 200 devs
+					* over 30 PR/day merged to main branch
+					* compilation time over 40 min on powerful machines
 				</script>
 			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Can we do better?
+				</script>
+			</section>
+
+
 
 		</section>
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					# Meet Hoarder
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					# Meet Hoarder
+					###...not Hodor
+
+					<img src="imgs/hodor.jpg" style="max-height: 550px">
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					# Not Hodor
+					### Hoarder
 
-					<img src="imgs/hodor.jpg" style="max-width: 400px">
+					<img src="imgs/hoarder.jpg" style="max-height: 550px">
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					<img src="imgs/hoarder.jpg" style="max-width: 800px">
-				</script>
-			</section>
-
-			<section data-markdown data-background-image="imgs/bg.png"> 
-				<script type="text/template">
-					The sbt plugin around 'cached compilation' idea.
+					The sbt plugin around for caching compilation results.
+					<br>
+					<br>
 
 					```scala
 					// In your project/plugins.sbt or ~/.sbt/plugins.sbt
-					addSbtPlugin("com.github.romanowski" % "hoarder" % "1.0.0-M1")
+					addSbtPlugin("com.github.romanowski" % "hoarder" % "1.0.0-M2")
 					```
-
+					<br>
 					[romanowski.github.io/hoarder](romanowski.github.io/hoarder)
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					### 'cached compilation' =
-					### *cache + incremental compilation*
+					## *cache + incremental compilation*
+					<br>
+
+					* Apply cached results
+					* Find out what is changed
+					* Recompile the difference
+
+					<br>
+					Beware: whole project may be recompiled!
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
-				<script type="text/template">
-					### 'cached compilation' Explained
-
-					``` scala
-					def cacheCompile(cache: CacheRef) = {
-					loadCache(cache)
-					compile()
-					}
-
-					def cacheCompileExplained(cache: CacheRef) = {
-					// This is not how this is done
-					val currentRef = currentSourceReference()
-					checkout(cache.sourceReference)
-					compile() // Most expensive part
-					checkout(currentRef)
-
-					compile(project)
-					}
-					```
-				</script>
-			</section>
-
-
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					#### Why is
 					### *cache + incremental compilation*
@@ -258,49 +270,30 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					### Loading my cache
-
-					``` scala
-					case class CacheRef(binaries: Path, metadata: Path, srcRef: Hash)
-
-					def loadCache(cache: CacheRef) {
-					// Clean classfiles, extract new ones
-					loadBinaries(cache.binaries)
-
-					// Most important part
-					val loadedMetadata = loadMetadata(cache.metadata)
-					compilationMetadataStore().store(loadedMetadata)
-					}
-					```
+					* Incremental compiler validate cache entry
+					* We don't need a direct hit - we just want to be close
+					* We can use partial cache (since everything not present in cache get recopiled)
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					### Metadata
-
-					```
-					show incCompileSetup
-					// [info] hoarder/compile:incCompileSetup
-					[info] IncSetup(
-					<function1>,
-						<function1>,false,
-							<path-to-metadatafile>,sbt.compiler.CompilerCache...
-								```
-
-								Usually
-
-								```
-								target/streams/compile/incCompileSetup/$global/streams/inc_compile
-
-								streams.in(compileIncSetup).value.cacheDirectory /
-								compileAnalysisFilename.value
-								```
+					## Cache
+					## =
+					### Metadata (zinc Analysis)
+					### +
+					### Binaries (classfileS)
 				</script>
 			</section>
 
+			<section data-markdown data-background-image="imgs/bg.png">
+				<script type="text/template">
+					# Metadata
+					## (zinc Analysis)
+				</script>
+			</section>
 
 			<section data-markdown class="small-code" style="top: 1px; width: 100%;" >
 				<script type="text/template" style="max-height: 750px">
@@ -394,7 +387,7 @@
 						internal apis:
 						1 items
 						/tmp/sbt_bacc976d/simpleTest/src/main/scala/Test.scala ->
-						rO0ABXNyABB4c2J0aS5hcGkuU291cmNlSjH5SdlLSkQCAAdJAAdhcGlIYXNoWgAIaGFzTWFjcm9aABBoYXNQYWNrYWdlT2JqZWN0TAAYX2ludGVybmFsT25seV9uYW1lSGFzaGVzdAAkTHhzYnRpL2FwaS9faW50ZXJuYWxPbmx5X05hbWVIYXNoZXM7TAADYXBpdAAVTHhzYnRpL2FwaS9Tb3VyY2VBUEk7TAALY29tcGlsYXRpb250ABdMeHNidGkvYXBpL0NvbXBpbGF0aW9uO1sABGhhc2h0AAJbQnhwECyksgAAc3IAInhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoZXNU2r6Z+tTsTAIAAlsAD2ltcGxpY2l0TWVtYmVyc3QAI1tMeHNidGkvYXBpL19pbnRlcm5hbE9ubHlfTmFtZUhhc2g7WwAOcmVndWxhck1lbWJlcnNxAH4AB3hwdXIAI1tMeHNidGkuYXBpLl9pbnRlcm5hbE9ubHlfTmFtZUhhc2g7SVqAtt2Wi/QCAAB4cAAAAAB1cQB+AAkAAAAbc3IAIHhzYnRpLmFwaS5faW50ZXJuYWxPbmx5X05hbWVIYXNoWw71InY4V88CAAJJAARoYXNoTAAEbmFtZXQAEkxqYXZhL2xhbmcvU3RyaW5nO3hwiJ9XtnQABm5vdGlmeXNxAH4ADJIESPB0AAR3YWl0c3EAfgAM1Km4b3QADSRhc0luc3RhbmNlT2ZzcQB+AAwFwSp9dAAFTXlBcHBzcQB+AAz+vNYJdAAGZXF1YWxzc3EAfgAM9R1afXQADGFzSW5zdGFuY2VPZnNxAH4ADP/bhjB0AA5leGVjdXRpb25TdGFydHNxAH4ADGKod6p0AAxzeW5jaHJvbml6ZWRzcQB+AAzQQZkidAANJGlzSW5zdGFuY2VPZnNxAH4ADK1nCfR0AARtYWluc3EAfgAMDQQ+MXQACW5vdGlmeUFsbHNxAH4ADIu64C90AAxpc0luc3RhbmNlT2ZzcQB+AAxu7RzpdAAGPGluaXQ+c3EAfgAMACLiOHQAAj09c3EAfgAMshBWMnQABWNsb25lc3EAfgAMv7XRUnQABiRpbml0JHNxAH4ADPOulJV0AARUZXN0c3EAfgAMLtZjBHQACHRvU3RyaW5nc3EAfgAMYi5VEXQABGFyZ3NzcQB+AAwNVdnxdAACIT1zcQB+AAyQns/ldAAIZ2V0Q2xhc3NzcQB+AAzyedohdAACbmVzcQB+AAwTj/0adAACZXFzcQB+AAzpV+xtdAALZGVsYXllZEluaXRzcQB+AAx6C7QSdAACIyNzcQB+AAzz4rGYdAAIZmluYWxpemVzcQB+AAwdrMEQdAAIaGFzaENvZGVzcgATeHNidGkuYXBpLlNvdXJjZUFQSblep/kpIzikAgACWwALZGVmaW5pdGlvbnN0ABdbTHhzYnRpL2FwaS9EZWZpbml0aW9uO1sACHBhY2thZ2VzdAAUW0x4c2J0aS9hcGkvUGFja2FnZTt4cHVyABdbTHhzYnRpLmFwaS5EZWZpbml0aW9uO4jJXOe0414OAgAAeHAAAAACc3IAE3hzYnRpLmFwaS5DbGFzc0xpa2WDNByh37CXbAIABEwADmRlZmluaXRpb25UeXBldAAaTHhzYnRpL2FwaS9EZWZpbml0aW9uVHlwZTtbABBzYXZlZEFubm90YXRpb25zdAATW0xqYXZhL2xhbmcvU3RyaW5nO0wACHNlbGZUeXBldAAQTHhzYnRpL2FwaS9MYXp5O0wACXN0cnVjdHVyZXEAfgBNeHIAIXhzYnRpLmFwaS5QYXJhbWV0ZXJpemVkRGVmaW5pdGlvbvkRbrHVUDziAgABWwAOdHlwZVBhcmFtZXRlcnN0ABpbTHhzYnRpL2FwaS9UeXBlUGFyYW1ldGVyO3hyABR4c2J0aS5hcGkuRGVmaW5pdGlvbocqG+hxQuNGAgAETAAGYWNjZXNzdAASTHhzYnRpL2FwaS9BY2Nlc3M7WwALYW5ub3RhdGlvbnN0ABdbTHhzYnRpL2FwaS9Bbm5vdGF0aW9uO0wACW1vZGlmaWVyc3QAFUx4c2J0aS9hcGkvTW9kaWZpZXJzO0wABG5hbWVxAH4ADXhwc3IAEHhzYnRpLmFwaS5QdWJsaWO6WD2ubC1gQgIAAHhyABB4c2J0aS5hcGkuQWNjZXNz3WKa+B1jMUgCAAB4cHVyABdbTHhzYnRpLmFwaS5Bbm5vdGF0aW9uO+uX6xkQ9o1IAgAAeHAAAAAAc3IAE3hzYnRpLmFwaS5Nb2RpZmllcnOX52HcEyZ7swIAAUIABWZsYWdzeHAAcQB+AC91cgAaW0x4c2J0aS5hcGkuVHlwZVBhcmFtZXRlcjvZbSYPKJ3ytgIAAHhwAAAAAH5yABh4c2J0aS5hcGkuRGVmaW5pdGlvblR5cGUAAAAAAAAAABIAAHhyAA5qYXZhLmxhbmcuRW51bQAAAAAAAAAAEgAAeHB0AAhDbGFzc0RlZnVyABNbTGphdmEubGFuZy5TdHJpbmc7rdJW5+kde0cCAAB4cAAAAABzcgAheHNidGkuYXBpLkFic3RyYWN0TGF6eSRTdHJpY3RMYXp5DWYcaykWKrgCAAFMAAV2YWx1ZXQAEkxqYXZhL2xhbmcvT2JqZWN0O3hwc3IAE3hzYnRpLmFwaS5FbXB0eVR5cGW8/Z5GSTuJJAIAAHhyABR4c2J0aS5hcGkuU2ltcGxlVHlwZXJ4YoghI79AAgAAeHIADnhzYnRpLmFwaS5UeXBlP2rZIRZJqsoCAAB4cHNxAH4AZHNyABN4c2J0aS5hcGkuU3RydWN0dXJlqar5gJNv2AACAANMAAhkZWNsYXJlZHEAfgBNTAAJaW5oZXJpdGVkcQB+AE1MAAdwYXJlbnRzcQB+AE14cQB+AGlzcQB+AGR1cQB+AEgAAAAAc3EAfgBkdXEAfgBIAAAAAHNxAH4AZHVyABFbTHhzYnRpLmFwaS5UeXBlO3T/pVp7+elBAgAAeHAAAAACc3IAFHhzYnRpLmFwaS5Qcm9qZWN0aW9u89KNVOlFpC0CAAJMAAJpZHEAfgANTAAGcHJlZml4dAAWTHhzYnRpL2FwaS9TaW1wbGVUeXBlO3hxAH4AaHQABk9iamVjdHNyABN4c2J0aS5hcGkuU2luZ2xldG9u/Kdf+M9W5EYCAAFMAARwYXRodAAQTHhzYnRpL2FwaS9QYXRoO3hxAH4AaHNyAA54c2J0aS5hcGkuUGF0aJs9XAjOpSeEAgABWwAKY29tcG9uZW50c3QAGltMeHNidGkvYXBpL1BhdGhDb21wb25lbnQ7eHB1cgAaW0x4c2J0aS5hcGkuUGF0aENvbXBvbmVudDtD2gl0LWcWdAIAAHhwAAAAA3NyAAx4c2J0aS5hcGkuSWSYMmyLN1PEQAIAAUwAAmlkcQB+AA14cgAXeHNidGkuYXBpLlBhdGhDb21wb25lbnRfmiJbLoafvAIAAHhwdAAEamF2YXNxAH4AgXQABGxhbmdzcgAOeHNidGkuYXBpLlRoaXPbCe2mzFpAXAIAAHhxAH4A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
+						rO0ABXNyABB4c2...
 						external apis:
 						0 items
 						source infos:
@@ -404,34 +397,69 @@
 						compilations:
 						1 items
 						0 ->
-						rO0ABXNyABV4c2J0aS5hcGkuQ29tcGlsYXRpb27t+uDDauigQgIAAkoACXN0YXJ0VGltZVsAB291dHB1dHN0ABpbTHhzYnRpL2FwaS9PdXRwdXRTZXR0aW5nO3hwAAABWn6vTUV1cgAaW0x4c2J0aS5hcGkuT3V0cHV0U2V0dGluZzt/asLzp4elQgIAAHhwAAAAAXNyABd4c2J0aS5hcGkuT3V0cHV0U2V0dGluZ3rZmkd0+x17AgACTAAPb3V0cHV0RGlyZWN0b3J5dAASTGphdmEvbGFuZy9TdHJpbmc7TAAPc291cmNlRGlyZWN0b3J5cQB+AAZ4cHQANi90bXAvc2J0X2JhY2M5NzZkL3NpbXBsZVRlc3QvdGFyZ2V0L3NjYWxhLTIuMTEvY2xhc3Nlc3QAAS8=
+						rO0ABXNyABV4c2J0aS5hcGkuQ29tcGlsYXRpb27t...
 						```
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
+				<script type="text/template">
+				How to find one?
+
+				```
+				show incCompileSetup
+				[info] hoarder/compile:incCompileSetup
+				[info] IncSetup(<function1>, <function1>, false,
+				<path-to-metadatafile>,sbt.compiler.CompilerCache, ...
+				```
+
+				Usually
+
+				```
+				target/streams/compile/incCompileSetup/$global/streams/inc_compile
+
+				streams.in(compileIncSetup).value.cacheDirectory /
+				compileAnalysisFilename.value
+				```
+				</script>
+			</section>
+
+			<section data-markdown data-background-image="imgs/bg.png">
+				<script type="text/template">
+					### Metadata (zinc Analysis)
+					### is workspace specific
+
+					* absoute path
+					* machine-specific paths to ivy-caches
+					* different output locations
+					* different line endings
+					* differnt location of JDK
+				</script>
+			</section>
+
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					```scala
 					trait AnalysisMappers {
-					val outputDirMapper: Mapper[File] = Mapper.forFile
-					val sourceDirMapper: Mapper[File] = Mapper.forFile
-					val scalacOptions: Mapper[String] = Mapper.forString
+						val outputDirMapper: Mapper[File] = Mapper.forFile
+						val sourceDirMapper: Mapper[File] = Mapper.forFile
+						val scalacOptions: Mapper[String] = Mapper.forString
 
-					val sourceMapper: Mapper[File] = Mapper.forFile
-					val productMapper: Mapper[File] = Mapper.forFile
-					val binaryMapper: Mapper[File] = Mapper.forFile
+						val sourceMapper: Mapper[File] = Mapper.forFile
+						val productMapper: Mapper[File] = Mapper.forFile
+						val binaryMapper: Mapper[File] = Mapper.forFile
 
-					type StampMapper = ContextAwareMapper[File, Stamp]
-					val binaryStampMapper: StampMapper  = Mapper.forStamp
-					val productStampMapper: StampMapper = Mapper.forStamp
-					val sourceStampMapper: StampMapper = Mapper.forStamp
+						type StampMapper = ContextAwareMapper[File, Stamp]
+						val binaryStampMapper: StampMapper  = Mapper.forStamp
+						val productStampMapper: StampMapper = Mapper.forStamp
+						val sourceStampMapper: StampMapper = Mapper.forStamp
 					}
 					```
 				</script>
 			</section>
 
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown>
 				<script type="text/template">
 					``` scala
 					products:
@@ -485,8 +513,20 @@
 				</script>
 			</section>
 
+			<section data-markdown data-background-image="imgs/bg.png">
+				<script type="text/template">
+					## How cache gets applied?
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+					Compilation is mimicked.
+
+					* Old classes are cleaned from output directories
+					* Classes from cache are extracted to output directories
+					* Metadata is transformed to workspace specific form
+					* Transformed metadata is saved to local sbt stores (AnalysisStore)
+				</script>
+			</section>
+
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					## Where is my cache?
 				</script>
@@ -497,13 +537,18 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
-					## Use Hoarder
+					## How can I use Hoarder
+
+					```scala
+					// In your project/plugins.sbt or ~/.sbt/plugins.sbt
+					addSbtPlugin("com.github.romanowski" % "hoarder" % "1.0.0-M2")
+					```
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					### Supported workflows
 
@@ -511,11 +556,11 @@
 					2. PR verification (Travis)
 					2. Cached release [BETA]
 
-					More planned.
+					More in future.
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					### Stash/StashApply
 
@@ -528,7 +573,13 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown>
+				<script type="text/template">
+					## Demo
+				</script>
+			</section>
+
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					### PR verification (Travis)
 
@@ -536,20 +587,36 @@
 					* Require caching mechanism for your CI engine (but can use e.g. S3)
 					* Required post-merge builds to verify code and generate new cache
 					* You need to pay attention to postmerge build
-					* Easy way to create a new caches TODO (example)
 
 					[romanowski.github.io/hoarder/docs/prVerification.html](romanowski.github.io/hoarder/docs/prVerification.html)
 				</script>
 			</section>
 
-
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					<img src="imgs/setup.png">
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
+				<script type="text/template">
+					New CI integration is easy to create.
+
+					No SBT knowledge is required!
+
+					<img src="imgs/cliff.jpg" style="max-height: 405px;"/>
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Let's integrate with Amzon S3!
+
+					## Demo
+				</script>
+			</section>
+
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					### Cached release [BETA]
 
@@ -561,16 +628,39 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png" class="small-code" style="top: 1px; width: 100%;">
 				<script type="text/template">
-					//TODO ls -al from cache
-					```bash
-					> ls -al /...
-					1
-					a
-					a
+					## What will be published?
 
 					```
+					> ls ~/.ivy2/local/org.virtuslab/unicorn-core_2.11/1.3.0-SNAPSHOT
+
+					```
+
+					```bash
+					size  name
+					19897 unicorn-core_2.11-compile-hoarder-cache.zip
+					   32 unicorn-core_2.11-compile-hoarder-cache.zip.md5
+					   40 unicorn-core_2.11-compile-hoarder-cache.zip.sha1
+					./docs: ...
+					./ivys: ...
+					./jars:
+					81359 unicorn-core_2.11.jar
+					   32 unicorn-core_2.11.jar.md5
+					   40 unicorn-core_2.11.jar.sha1
+					./poms: ...
+					./srcs: ...
+					./test-hoarder-caches:
+					66438 unicorn-core_2.11-test-hoarder-cache.zip
+					   32 unicorn-core_2.11-test-hoarder-cache.zip.md5
+					   40 unicorn-core_2.11-test-hoarder-cache.zip.sha1
+					```
+				</script>
+			</section>
+
+			<section data-markdown>
+				<script type="text/template">
+					## Demo
 				</script>
 			</section>
 
@@ -578,26 +668,26 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					## Plans for future
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					## Testing
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					* Support for sbt 1.0 (sbt 1.0.0-M6 is released!)
 					* Support for IDEs
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					#### Incremental-aware library dependencies
 
@@ -605,7 +695,7 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					Workflows:
 
@@ -621,7 +711,7 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown data-background-image="imgs/bg.png"> 
+			<section data-markdown data-background-image="imgs/bg.png">
 				<script type="text/template">
 					[romanowski.github.io/hoarder](romanowski.github.io/hoarder)
 
