@@ -6,8 +6,8 @@
 
 	<title>DRY compiling!</title>
 	<meta name="description" content="Use hoarder to reuse compiled code!">
-	<meta name="author" content="Krzysztof Romanowski">
 
+	<meta name="author" content="Krzysztof Romanowski">
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 
@@ -69,6 +69,7 @@
 </head>
 
 <body style="background-image: url('imgs/bg.png');">
+<img src="imgs/vl-white.png" style="position: absolute; bottom: 40px; left: 49px; max-width: 250px; z-index:9999;" >
 
 <div class="reveal">
 
@@ -90,7 +91,7 @@
 				<br>
 
 
-				<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
+				<img src="imgs/vl-white.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
 			</script>
 		</section>
 
@@ -103,7 +104,7 @@
 			</script>
 		</section>
 
-		<section data-markdown data-background-image>
+		<section data-markdown data-background-image style="z-index: 100">
 			<script type="text/template">
 				## Krzysztof Romanowski
 
@@ -118,19 +119,20 @@
 
 				</div>
 
-				<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
+				<img src="imgs/vl-white.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
 			</script>
+		</section>
 
-			<section data-markdown data-background-image>
-				<script type="text/template">
-					Codebase I am working with:
+		<section data-markdown data-background-image>
+			<script type="text/template">
+				Codebase I am working with:
 
-					* big Scala project: 2 MLoC
-					* over 200 devs
-					* over 30 PR/day merged to main branch
-					* compilation time over 40 min on powerful machines
-				</script>
-			</section>
+				* monorepo
+				* big Scala project: 2 MLoC
+				* over 200 devs
+				* over 30 PR/day merged to main branch
+				* compilation time over 40 min on powerful machines
+			</script>
 		</section>
 
 		<!-- ################################################################################################################ -->
@@ -257,15 +259,14 @@
 
 			<section data-markdown data-background-image>
 				<script type="text/template">
-					## *cache + incremental compilation*
-					<br>
+					## How does it work?
 
-					* Apply cached results
-					* Find out what is changed
-					* Recompile the difference
+					Compilation is mimicked.
 
-					<br>
-					Beware: whole project may be recompiled!
+					* Old classes are cleaned from output directories
+					* Classes from cache are extracted to output directories
+					* Metadata is transformed to workspace specific form
+					* Transformed metadata is saved to local sbt stores (AnalysisStore)
 				</script>
 			</section>
 
@@ -279,7 +280,7 @@
 
 					* Incremental compiler validate cache entry
 					* We don't need a direct hit - we just want to be close
-					* We can use partial cache (since everything not present in cache get recopiled)
+					* We can use partial cache (since everything not present in cache get recompiled)
 				</script>
 			</section>
 
@@ -290,19 +291,6 @@
 					### Metadata (zinc Analysis)
 					### +
 					### Binaries (classfileS)
-				</script>
-			</section>
-
-			<section data-markdown data-background-image>
-				<script type="text/template">
-					## How cache gets applied?
-
-					Compilation is mimicked.
-
-					* Old classes are cleaned from output directories
-					* Classes from cache are extracted to output directories
-					* Metadata is transformed to workspace specific form
-					* Transformed metadata is saved to local sbt stores (AnalysisStore)
 				</script>
 			</section>
 
@@ -730,7 +718,7 @@
 
 					</div>
 
-					<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
+					<img src="imgs/vl-white.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
 				</script>
 			</section>
 		</section>
