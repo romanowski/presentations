@@ -4,8 +4,8 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Incremental Compiler: taming Scalac</title>
-	<meta name="description" content="What is and how works incremental compiler in sbt world">
+	<title>DRY compiling!</title>
+	<meta name="description" content="Use hoarder to reuse compiled code!">
 	<meta name="author" content="Krzysztof Romanowski">
 
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -29,6 +29,20 @@
 			background: #244194 !important;
     }
 
+		.small-code {
+			margin-top: -50px !important;
+		}
+
+		.reveal .small-code  pre {
+			margin: 0px !important;
+			width: 100% !important;
+		}
+
+		.reveal .small-code pre code {
+			max-height: 750px !important;
+			top: 1px !important;
+			width: 100% !important;
+		}
 
 	</style>
 
@@ -54,14 +68,14 @@
 	<![endif]-->
 </head>
 
-<body>
+<body style="background-image: url('imgs/bg.png');">
 
 <div class="reveal">
 
 	<!-- Any section element inside of this container is displayed as a slide -->
-	<div class="slides">
+	<div class="slides" >
 
-		<section data-markdown data-background-image="imgs/bg.png">
+		<section data-markdown data-background-image>
 			<script type="text/template">
 				<br>
 				<br>
@@ -89,7 +103,7 @@
 			</script>
 		</section>
 
-		<section data-markdown data-background-image="imgs/bg.png">
+		<section data-markdown data-background-image>
 			<script type="text/template">
 				## Krzysztof Romanowski
 
@@ -106,18 +120,29 @@
 
 				<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
 			</script>
+
+			<section data-markdown data-background-image>
+				<script type="text/template">
+					Codebase I am working with:
+
+					* big Scala project: 2 MLoC
+					* over 200 devs
+					* over 30 PR/day merged to main branch
+					* compilation time over 40 min on powerful machines
+				</script>
+			</section>
 		</section>
 
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					## Quick look at the slow compiler
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					### My build usually takes
 
@@ -129,33 +154,30 @@
 					| ~minute |  wait, but&nbsp;rather&nbsp;not |
 					| ~5&nbsp;minutes | reply to an mail, talk&nbsp;on&nbsp;slack |
 					| ~15&nbsp;minutes | go for coffee, do&nbsp;a&nbsp;review |
+
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
-				<script type="text/template">
-					<img src="imgs/li.png"/>
-					[twitter.com/li_haoyi/status/742689412308467712](https://twitter.com/li_haoyi/status/742689412308467712)
-				</script>
-			</section>
-
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					| project | 'cold' | 'warm'
 					| -- | -- | -- |
 					| ensime-server | 21s | 12s
 					| scala-debugger | 30s | 24s |
 					| akka | 19s | 11s |
+
+					<img src="imgs/li.png" style="max-height: 400px;"/>
+					[twitter.com/li_haoyi/status/742689412308467712](https://twitter.com/li_haoyi/status/742689412308467712)
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					## Keep your jvm (sbt) hot!
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					## My full build usually takes
 
@@ -170,32 +192,15 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
-				<script type="text/template">
-					<img src="imgs/compiling.png"/>
-
-					xkcd.com/303
-				</script>
-			</section>
-
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					| project | time |
 					| -- | -- | -- |
 					| ensime-server | 161s |
 					| scala-debugger | 294s |
 					| akka | 316s |
-				</script>
-			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
-				<script type="text/template">
-					Codebase I am working with:
-
-					* big Scala project: 2 MLoC
-					* over 200 devs
-					* over 30 PR/day merged to main branch
-					* compilation time over 40 min on powerful machines
+					<img src="imgs/compiling.png" alt="xkcd.com/303"/>
 				</script>
 			</section>
 
@@ -211,13 +216,13 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					# Meet Hoarder
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					###...not Hodor
 
@@ -225,7 +230,7 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					### Hoarder
 
@@ -233,8 +238,10 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
+					### Hoarder
+
 					The sbt plugin around for caching compilation results.
 					<br>
 					<br>
@@ -248,7 +255,7 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					## *cache + incremental compilation*
 					<br>
@@ -262,23 +269,21 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					#### Why is
 					### *cache + incremental compilation*
 					#### so powerful?
-				</script>
-			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
-				<script type="text/template">
+					<br>
+
 					* Incremental compiler validate cache entry
 					* We don't need a direct hit - we just want to be close
 					* We can use partial cache (since everything not present in cache get recopiled)
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					## Cache
 					## =
@@ -288,14 +293,53 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
-					# Metadata
-					## (zinc Analysis)
+					## How cache gets applied?
+
+					Compilation is mimicked.
+
+					* Old classes are cleaned from output directories
+					* Classes from cache are extracted to output directories
+					* Metadata is transformed to workspace specific form
+					* Transformed metadata is saved to local sbt stores (AnalysisStore)
 				</script>
 			</section>
 
-			<section data-markdown class="small-code" style="top: 1px; width: 100%;" >
+			<section data-markdown data-background-image>
+				<script type="text/template">
+					# Metadata
+					## (zinc Analysis)
+
+					* describes state of workspace during last compilation
+					* describes relation between sources
+					* describes sources->libraries dependencies
+				</script>
+			</section>
+
+			<section data-markdown data-background-image>
+				<script type="text/template">
+				How to find one?
+
+				```
+				show incCompileSetup
+				[info] hoarder/compile:incCompileSetup
+				[info] IncSetup(<function1>, <function1>, false,
+				<path-to-metadatafile>,sbt.compiler.CompilerCache, ...
+				```
+
+				Usually
+
+				```
+				target/streams/compile/incCompileSetup/$global/streams/inc_compile
+
+				streams.in(compileIncSetup).value.cacheDirectory /
+				compileAnalysisFilename.value
+				```
+				</script>
+			</section>
+
+			<section data-markdown class="small-code"  >
 				<script type="text/template" style="max-height: 750px">
 					``` scala
 					format version: 5
@@ -402,29 +446,7 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
-				<script type="text/template">
-				How to find one?
-
-				```
-				show incCompileSetup
-				[info] hoarder/compile:incCompileSetup
-				[info] IncSetup(<function1>, <function1>, false,
-				<path-to-metadatafile>,sbt.compiler.CompilerCache, ...
-				```
-
-				Usually
-
-				```
-				target/streams/compile/incCompileSetup/$global/streams/inc_compile
-
-				streams.in(compileIncSetup).value.cacheDirectory /
-				compileAnalysisFilename.value
-				```
-				</script>
-			</section>
-
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					### Metadata (zinc Analysis)
 					### is workspace specific
@@ -437,7 +459,7 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					```scala
 					trait AnalysisMappers {
@@ -459,7 +481,7 @@
 			</section>
 
 
-			<section data-markdown>
+			<section data-markdown class="small-code">
 				<script type="text/template">
 					``` scala
 					products:
@@ -513,20 +535,7 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
-				<script type="text/template">
-					## How cache gets applied?
-
-					Compilation is mimicked.
-
-					* Old classes are cleaned from output directories
-					* Classes from cache are extracted to output directories
-					* Metadata is transformed to workspace specific form
-					* Transformed metadata is saved to local sbt stores (AnalysisStore)
-				</script>
-			</section>
-
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					## Where is my cache?
 				</script>
@@ -537,7 +546,7 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					## How can I use Hoarder
 
@@ -548,7 +557,7 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					### Supported workflows
 
@@ -560,7 +569,7 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					### Stash/StashApply
 
@@ -579,7 +588,7 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					### PR verification (Travis)
 
@@ -592,31 +601,27 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					<img src="imgs/setup.png">
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					New CI integration is easy to create.
 
 					No SBT knowledge is required!
-
-					<img src="imgs/cliff.jpg" style="max-height: 405px;"/>
 				</script>
 			</section>
 
 			<section data-markdown>
 				<script type="text/template">
 					## Let's integrate with Amzon S3!
-
-					## Demo
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					### Cached release [BETA]
 
@@ -628,32 +633,29 @@
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png" class="small-code" style="top: 1px; width: 100%;">
+			<section data-markdown data-background-image class="small-code" style="top: 1px; width: 100%;">
 				<script type="text/template">
 					## What will be published?
 
 					```
-					> ls ~/.ivy2/local/org.virtuslab/unicorn-core_2.11/1.3.0-SNAPSHOT
+					> ls -Rl ~/.ivy2/local/org.virtuslab/unicorn-core_2.11/1.3.0
 
 					```
 
 					```bash
 					size  name
+					compile-hoarder-caches:
 					19897 unicorn-core_2.11-compile-hoarder-cache.zip
 					   32 unicorn-core_2.11-compile-hoarder-cache.zip.md5
 					   40 unicorn-core_2.11-compile-hoarder-cache.zip.sha1
-					./docs: ...
-					./ivys: ...
-					./jars:
+					docs: ...
+					ivys: ...
+					jars:
 					81359 unicorn-core_2.11.jar
 					   32 unicorn-core_2.11.jar.md5
 					   40 unicorn-core_2.11.jar.sha1
-					./poms: ...
-					./srcs: ...
-					./test-hoarder-caches:
-					66438 unicorn-core_2.11-test-hoarder-cache.zip
-					   32 unicorn-core_2.11-test-hoarder-cache.zip.md5
-					   40 unicorn-core_2.11-test-hoarder-cache.zip.sha1
+					poms: ...
+					srcs: ...
 					```
 				</script>
 			</section>
@@ -668,41 +670,45 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					## Plans for future
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
-					## Testing
+					## Testing and Feedback
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					* Support for sbt 1.0 (sbt 1.0.0-M6 is released!)
 					* Support for IDEs
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					#### Incremental-aware library dependencies
 
-					TODO slides
+					* Every change in library trigger long compilations
+						* *all usages get recompiled*
+					* Problem when developing common libs
+					* Project is released with incremental metadata
+					* May be tricky to implement (due to sbt internals)
 				</script>
 			</section>
 
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					Workflows:
 
 					* Abstract cache provider
 					* New cache detection mechanisms:
-					* tag/commit based
-					* provided by users
+						* tag/commit based
+						* provided by users
 					* Automatic cache application
 				</script>
 			</section>
@@ -711,7 +717,7 @@
 		<!-- ################################################################################################################ -->
 
 		<section>
-			<section data-markdown data-background-image="imgs/bg.png">
+			<section data-markdown data-background-image>
 				<script type="text/template">
 					[romanowski.github.io/hoarder](romanowski.github.io/hoarder)
 
@@ -727,9 +733,10 @@
 					<img src="imgs/vl.png" alt="Virtus Lab" style="background: none; border: none; box-shadow: none"/>
 				</script>
 			</section>
-
-			<section data-markdown data-background-image="imgs/pre-last.png"/>
-			<section data-markdown data-background-image="imgs/last.png"/>
+		</section>
+		<section data-markdown data-background-image="imgs/pre-last.png">
+		</section>
+		<section data-markdown data-background-image="imgs/last.png"/>
 		</section>
 
 		<!-- ################################################################################################################ -->
