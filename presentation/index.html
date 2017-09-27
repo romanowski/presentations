@@ -92,6 +92,14 @@
 
 		<section data-markdown>
 			<script type="text/template">
+				# <span class="marked">$$$</span>
+
+				TODO stack data
+			</script>
+		</section>
+
+		<section data-markdown>
+			<script type="text/template">
 				### <a href="https://scastie.scala-lang.org" class="marked">scastie.scala-lang.org</a>
 
 				Try it as we speak
@@ -377,6 +385,60 @@
 				// ... copy method and fancy toString are generated for you
 				println(Point(1,2).copy(b = 3)) // prints 'Point(1, 3)'
 
+				```
+			</script>
+		</section>
+
+		<section data-markdown>
+			<script type="text/template">
+				pattern matching
+
+
+				```scala
+				case class Point(a: Int, b: Int)
+
+				def isOnAxis(p: Point) = p match {
+					case Point(0, _) => true
+					case Point(_, 0) => true
+					case other @ Point(x, y) if iWantToPrint(x, y) =>
+						println("We can extract whole thing ($other)...")
+						println("... or deconstruct parts ($x, $y).")
+						println("We can always ")
+
+			// TODO
+
+				false
+				}
+
+				```
+				// No special cases!
+				object OnYAxis {
+					def unapply(p: Point): Option[Int] =
+					if(p.y == 0) Some(p.x) else None
+				}
+				def doSomething(p: Point) = p match {
+					case OnYAxis(x) => x
+				}
+
+				// or even
+				val OnYAxis(x) = Point(4, 0)
+
+				```
+
+			</script>
+		</section>
+
+		<section data-markdown>
+			<script type="text/template">
+				Live example.
+				How return 2 values from function?
+
+				```scala
+				val (a, b) = { // This is syntactic sugar for `Tuple2(a, b)`
+					val a = costlyOperation()
+					val b = costlyOperationOnA(a)
+					(a, b) // This is syntactic sugar for `Tuple2(a, b)`
+				}
 				```
 			</script>
 		</section>
